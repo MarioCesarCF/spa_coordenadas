@@ -12,12 +12,13 @@
 | Dev server | `npm run dev` (port 5173) |
 | Production build | `npm run build` |
 | Preview build | `npm run preview` |
+| Run tests | `npm test` (48 tests, 7 suites) |
 
 ## Architecture
 
-**Dependency:** requires API backend running at `http://localhost:27017` (project `API_COORDENADAS`).
+**Dependency:** requires API backend at `https://api-coordenadas-w03m.onrender.com`.
 
-**Vite proxy** (`vite.config.js`): paths `/usuario` and `/empresa` are proxied to `localhost:27017`.
+**Axios** (`src/api/axios.js`): `baseURL` aponta diretamente para o endpoint remoto. Sem proxy Vite.
 
 **Routing** (`src/App.jsx`):
 - `/login` — public
@@ -36,7 +37,7 @@
 - **Green primary color** (`#2e7d32`) — use MUI's `<Button color="primary">` consistently
 - All API calls use the `api` instance from `src/api/axios.js` (not raw axios)
 - EPA queries use `?name=`, `?document=`, `?city=`, `?numero_processo=`
-- No tests exist yet
+- Tests run with `npm test` (7 suites, 48 tests)
 
 ## Related project
 Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start with `npm run dev` there first.
