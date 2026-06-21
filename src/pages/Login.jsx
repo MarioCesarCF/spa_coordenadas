@@ -46,11 +46,13 @@ export default function Login() {
 
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-      bgcolor="#f5f5f5"
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        bgcolor: '#f5f5f5',
+      }}
     >
       <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
         <CardContent sx={{ p: 4 }}>

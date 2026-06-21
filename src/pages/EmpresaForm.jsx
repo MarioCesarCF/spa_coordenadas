@@ -11,7 +11,38 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { Save, ArrowBack } from '@mui/icons-material'
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet'
+import L from 'leaflet'
 import api from '../api/axios'
+
+const defaultIcon = new L.Icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
+
+function LocationMarker({ position, onPositionChange }) {
+  useMapEvents({
+    click(e) {
+      onPositionChange(e.latlng)
+    },
+  })
+  return position ? <Marker position={position} icon={defaultIcon} /> : null
+}
+
+function MapUpdater({ position }) {
+  const map = useMap()
+  useEffect(() => {
+    if (position) {
+      map.setView(position, Math.max(map.getZoom(), 13))
+    }
+  }, [position, map])
+  return null
+}
 
 const initialForm = {
   nome: '',
@@ -79,6 +110,20 @@ export default function EmpresaForm() {
     setForm((prev) => ({ ...prev, [field]: e.target.value }))
   }
 
+  const lat = parseFloat(form.latitude)
+  const lng = parseFloat(form.longitude)
+  const position = !isNaN(lat) && !isNaN(lng) ? [lat, lng] : null
+  const mapCenter = position || [-14.235, -51.925]
+  const mapZoom = position ? 15 : 4
+
+  const handleMapClick = ({ lat: newLat, lng: newLng }) => {
+    setForm((prev) => ({
+      ...prev,
+      latitude: newLat.toFixed(6),
+      longitude: newLng.toFixed(6),
+    }))
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
@@ -143,7 +188,7 @@ export default function EmpresaForm() {
           <Grid container spacing={2} mb={3}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
-                label="Nome *"
+                label="Nome "
                 fullWidth
                 required
                 value={form.nome}
@@ -152,7 +197,7 @@ export default function EmpresaForm() {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
-                label="Nº Documento *"
+                label="Nº Documento "
                 fullWidth
                 required
                 value={form.numero_documento}
@@ -161,7 +206,7 @@ export default function EmpresaForm() {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
-                label="Cidade *"
+                label="Cidade "
                 fullWidth
                 required
                 value={form.cidade}
@@ -200,6 +245,14 @@ export default function EmpresaForm() {
             </Grid>
             <Grid size={{ xs: 12, sm: 4 }}>
               <TextField
+                label="Decisão"
+                fullWidth
+                value={form.decisao}
+                onChange={handleChange('decisao')}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 3 }}>
+              <TextField
                 label="Ano"
                 fullWidth
                 type="number"
@@ -207,7 +260,7 @@ export default function EmpresaForm() {
                 onChange={handleChange('ano')}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
+            <Grid size={{ xs: 12, sm: 3 }}>
               <TextField
                 label="Mês"
                 fullWidth
@@ -215,15 +268,7 @@ export default function EmpresaForm() {
                 onChange={handleChange('mes')}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <TextField
-                label="Decisão"
-                fullWidth
-                value={form.decisao}
-                onChange={handleChange('decisao')}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
+            <Grid size={{ xs: 12, sm: 3 }}>
               <TextField
                 label="Bioma"
                 fullWidth
@@ -231,7 +276,7 @@ export default function EmpresaForm() {
                 onChange={handleChange('bioma')}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
+            <Grid size={{ xs: 12, sm: 3 }}>
               <TextField
                 label="Área Autorizada (ha)"
                 fullWidth
@@ -245,50 +290,73 @@ export default function EmpresaForm() {
           <Typography variant="subtitle1" fontWeight="600" gutterBottom>
             Coordenadas
           </Typography>
-          <Grid container spacing={2} mb={3}>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <TextField
-                label="Coordenada X (UTM)"
-                fullWidth
-                type="number"
-                value={form.coordenada_x}
-                onChange={handleChange('coordenada_x')}
-              />
+          <Grid container spacing={2} mb={3} alignItems="stretch">
+            <Grid size={{ xs: 12, md: 5 }}>
+              <Grid container spacing={2} direction="column">
+                <Grid>
+                  <TextField
+                    label="Coordenada X (UTM)"
+                    fullWidth
+                    type="number"
+                    value={form.coordenada_x}
+                    onChange={handleChange('coordenada_x')}
+                  />
+                </Grid>
+                <Grid>
+                  <TextField
+                    label="Longitude (WGS84)"
+                    fullWidth
+                    type="number"
+                    value={form.longitude}
+                    onChange={handleChange('longitude')}
+                  />
+                </Grid>
+                <Grid>
+                  <TextField
+                    label="Fuso"
+                    fullWidth
+                    value={form.fuso}
+                    onChange={handleChange('fuso')}
+                  />
+                </Grid>
+                <Grid>
+                  <TextField
+                    label="Coordenada Y (UTM)"
+                    fullWidth
+                    type="number"
+                    value={form.coordenada_y}
+                    onChange={handleChange('coordenada_y')}
+                  />
+                </Grid>
+                <Grid>
+                  <TextField
+                    label="Latitude (WGS84)"
+                    fullWidth
+                    type="number"
+                    value={form.latitude}
+                    onChange={handleChange('latitude')}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <TextField
-                label="Longitude (WGS84)"
-                fullWidth
-                type="number"
-                value={form.longitude}
-                onChange={handleChange('longitude')}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <TextField
-                label="Fuso"
-                fullWidth
-                value={form.fuso}
-                onChange={handleChange('fuso')}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <TextField
-                label="Coordenada Y (UTM)"
-                fullWidth
-                type="number"
-                value={form.coordenada_y}
-                onChange={handleChange('coordenada_y')}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <TextField
-                label="Latitude (WGS84)"
-                fullWidth
-                type="number"
-                value={form.latitude}
-                onChange={handleChange('latitude')}
-              />
+            <Grid size={{ xs: 12, md: 7 }} sx={{ display: 'flex' }}>
+              <Paper
+                sx={{ width: 1, minHeight: 420, overflow: 'hidden' }}
+                variant="outlined"
+              >
+                <MapContainer
+                  center={mapCenter}
+                  zoom={mapZoom}
+                  style={{ height: '100%', width: '100%' }}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <LocationMarker position={position} onPositionChange={handleMapClick} />
+                  <MapUpdater position={position} />
+                </MapContainer>
+              </Paper>
             </Grid>
           </Grid>
 

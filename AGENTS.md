@@ -40,3 +40,15 @@
 
 ## Related project
 Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start with `npm run dev` there first.
+
+## Change documentation
+Every major feature or structural change **must** be logged at the bottom of this file in reverse chronological order (newest first). Use the following format:
+
+```markdown
+### YYYY-MM-DD — Título breve da mudança
+- O que foi feito e por quê
+- Arquivos modificados (lista simplificada)
+- Decisões técnicas relevantes
+```
+
+This keeps a lightweight changelog of the project's evolution embedded in the agents config.
