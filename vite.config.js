@@ -5,15 +5,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    proxy: {
-      '/usuario': {
-        target: 'http://localhost:27017',
-        changeOrigin: true,
-      },
-      '/empresa': {
-        target: 'http://localhost:27017',
-        changeOrigin: true,
-      },
-    },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './vitest.setup.jsx',
+    css: true,
   },
 })
