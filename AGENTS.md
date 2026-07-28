@@ -18,6 +18,11 @@
 
 **Dependency:** requires API backend at `https://api-coordenadas-w03m.onrender.com`.
 
+**Context providers** (nesting order in `main.jsx`):
+1. `BrowserRouter` → `AuthProvider` → `App` (inside App: `OrganizacaoProvider`)
+2. `AuthContext` — user login state, localStorage tokens
+3. `OrganizacaoContext` — organização do usuário logado, carregada via `GET /organizacao/me`
+
 **Axios** (`src/api/axios.js`): `baseURL` aponta diretamente para o endpoint remoto. Sem proxy Vite.
 
 **Routing** (`src/App.jsx`):
@@ -25,6 +30,7 @@
 - `/` — empresa list (auth required)
 - `/empresa/nova` — create (auth required)
 - `/empresa/:id/editar` — edit (auth required)
+- `/organizacao` — org settings + member management (auth required)
 - `*` — redirects to `/`
 
 ## Auth
@@ -38,6 +44,7 @@
 - All API calls use the `api` instance from `src/api/axios.js` (not raw axios)
 - EPA queries use `?name=`, `?document=`, `?city=`, `?numero_processo=`
 - Tests run with `npm test` (7 suites, 48 tests)
+- `OrganizacaoContext` provides `{ org, orgLoading, criarOrg, atualizarOrg, carregarOrg }`
 
 ## Related project
 Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start with `npm run dev` there first.

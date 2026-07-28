@@ -31,6 +31,7 @@ import {
   Search,
   Clear,
   FileUpload,
+  Description,
 } from '@mui/icons-material'
 import api from '../api/axios'
 
@@ -261,6 +262,14 @@ export default function EmpresaLista() {
                     <TableCell>{emp.numero_processo || '—'}</TableCell>
                     <TableCell>{formatDecisao(emp.decisao)}</TableCell>
                     <TableCell align="center">
+                      <Tooltip title="Documentos">
+                        <IconButton
+                          size="small"
+                          onClick={() => navigate(`/empresa/${emp._id}/documentos`)}
+                        >
+                          <Description fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
                       <Tooltip title="Editar">
                         <IconButton
                           size="small"

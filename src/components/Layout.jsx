@@ -6,12 +6,17 @@ import {
   Button,
   Container,
   Box,
+  Chip,
 } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout'
+import SettingsIcon from '@mui/icons-material/Settings'
+import DescriptionIcon from '@mui/icons-material/Description'
 import { useAuth } from '../hooks/useAuth'
+import { useOrg } from '../contexts/OrganizacaoContext'
 
 export default function Layout() {
   const { user, logout } = useAuth()
+  const { org } = useOrg()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -30,9 +35,33 @@ export default function Layout() {
           >
             SPA Coordenadas
           </Typography>
+          {org && (
+            <Chip
+              label={org.nome}
+              size="small"
+              variant="outlined"
+              sx={{ color: 'white', borderColor: 'rgba(255,255,255,0.5)', mr: 2 }}
+            />
+          )}
+          <Button
+            color="inherit"
+            onClick={() => navigate('/documentos')}
+            startIcon={<DescriptionIcon />}
+            sx={{ mr: 1 }}
+          >
+            Documentos
+          </Button>
           <Typography variant="body2" sx={{ mr: 2 }}>
             {user?.nome}
           </Typography>
+          <Button
+            color="inherit"
+            onClick={() => navigate('/organizacao')}
+            startIcon={<SettingsIcon />}
+            sx={{ mr: 1 }}
+          >
+            Organização
+          </Button>
           <Button color="inherit" onClick={handleLogout} startIcon={<LogoutIcon />}>
             Sair
           </Button>

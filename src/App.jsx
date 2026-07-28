@@ -5,6 +5,10 @@ import Layout from './components/Layout'
 import Login from './pages/Login'
 import EmpresaLista from './pages/EmpresaLista'
 import EmpresaForm from './pages/EmpresaForm'
+import OrganizacaoPage from './pages/OrganizacaoPage'
+import DocumentoLista from './pages/DocumentoLista'
+import DocumentoForm from './pages/DocumentoForm'
+import { OrganizacaoProvider } from './contexts/OrganizacaoContext'
 
 const theme = createTheme({
   palette: {
@@ -18,17 +22,24 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route element={<PrivateRoute />}>
-          <Route element={<Layout />}>
-            <Route path="/" element={<EmpresaLista />} />
-            <Route path="/empresa/nova" element={<EmpresaForm />} />
-            <Route path="/empresa/:id/editar" element={<EmpresaForm />} />
+      <OrganizacaoProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route element={<PrivateRoute />}>
+            <Route element={<Layout />}>
+              <Route path="/" element={<EmpresaLista />} />
+              <Route path="/empresa/nova" element={<EmpresaForm />} />
+              <Route path="/empresa/:id/editar" element={<EmpresaForm />} />
+              <Route path="/empresa/:empresaId/documentos" element={<DocumentoLista />} />
+              <Route path="/documentos" element={<DocumentoLista />} />
+              <Route path="/documento/novo" element={<DocumentoForm />} />
+              <Route path="/documento/:id/editar" element={<DocumentoForm />} />
+              <Route path="/organizacao" element={<OrganizacaoPage />} />
+            </Route>
           </Route>
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </OrganizacaoProvider>
     </ThemeProvider>
   )
 }

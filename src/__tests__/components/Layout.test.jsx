@@ -8,7 +8,12 @@ vi.mock('../../hooks/useAuth', () => ({
   useAuth: vi.fn(),
 }))
 
+vi.mock('../../contexts/OrganizacaoContext', () => ({
+  useOrg: vi.fn(),
+}))
+
 import { useAuth } from '../../hooks/useAuth'
+import { useOrg } from '../../contexts/OrganizacaoContext'
 
 function renderWithRouter(ui) {
   return render(
@@ -26,6 +31,7 @@ function renderWithRouter(ui) {
 describe('Layout', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    useOrg.mockReturnValue({ org: null, orgLoading: false })
   })
 
   it('renderiza toolbar com nome do usuário', () => {

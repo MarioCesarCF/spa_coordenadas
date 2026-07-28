@@ -55,6 +55,7 @@ vi.mock('@mui/material', () => {
     Grid: mockComponent('div', 'Grid'),
     IconButton: mockComponent('button', 'IconButton'),
     InputAdornment: mockComponent('div', 'InputAdornment'),
+    Chip: mockComponent('span', 'Chip'),
     CssBaseline: () => null,
     ThemeProvider: ({ children }) => React.createElement(React.Fragment, null, children),
     createTheme: () => ({}),
@@ -80,6 +81,11 @@ vi.mock('@mui/icons-material', () => {
     Save: icon,
     ArrowBack: icon,
     Logout: icon,
+    Settings: icon,
+    PersonAdd: icon,
+    Description: icon,
+    CloudUpload: icon,
+    Download: icon,
   }
 })
 
