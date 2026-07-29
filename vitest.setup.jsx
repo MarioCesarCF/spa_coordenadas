@@ -60,6 +60,23 @@ vi.mock('@mui/material', () => {
     ThemeProvider: ({ children }) => React.createElement(React.Fragment, null, children),
     createTheme: () => ({}),
     useMediaQuery: () => false,
+    useTheme: () => ({ palette: { primary: { main: '#2e7d32' }, mode: 'light' }, breakpoints: { down: () => '(max-width:900px)' } }),
+    Avatar: mockComponent('div', 'Avatar'),
+    Menu: React.forwardRef(({ children, open, ...props }, ref) => {
+      if (!open) return null
+      return React.createElement('div', { ...props, ref }, children)
+    }),
+    MenuItem: mockComponent('div', 'MenuItem'),
+    ListItemIcon: mockComponent('div', 'ListItemIcon'),
+    ListItemText: mockComponent('span', 'ListItemText'),
+    List: mockComponent('div', 'List'),
+    ListItem: mockComponent('div', 'ListItem'),
+    ListItemButton: mockComponent('div', 'ListItemButton'),
+    Drawer: React.forwardRef(({ children, open, ...props }, ref) => {
+      if (!open) return null
+      return React.createElement('div', { ...props, ref }, children)
+    }),
+    Divider: mockComponent('hr', 'Divider'),
   }
   return mod
 })
@@ -86,6 +103,12 @@ vi.mock('@mui/icons-material', () => {
     Description: icon,
     CloudUpload: icon,
     Download: icon,
+    Person: icon,
+    Business: icon,
+    Menu: icon,
+    Home: icon,
+    Upgrade: icon,
+    CheckCircle: icon,
   }
 })
 

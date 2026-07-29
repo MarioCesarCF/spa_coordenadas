@@ -132,16 +132,23 @@ export default function EmpresaLista() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexShrink: 0 }}>
+      <Box sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', sm: 'row' },
+        justifyContent: 'space-between',
+        alignItems: { xs: 'stretch', sm: 'center' },
+        gap: 1.5,
+        mb: 2,
+      }}>
         <Typography variant="h5" fontWeight="600">
           Empresas
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1, flexShrink: 0 }}>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
           <Button
             variant="contained"
             startIcon={<Add />}
             onClick={() => navigate('/empresa/nova')}
-            sx={{ whiteSpace: 'nowrap' }}
+            sx={{ whiteSpace: 'nowrap', flex: { xs: 1, sm: 'none' } }}
           >
             Nova Empresa
           </Button>
@@ -150,9 +157,9 @@ export default function EmpresaLista() {
             startIcon={<FileUpload />}
             onClick={() => fileInputRef.current?.click()}
             disabled={importing}
-            sx={{ whiteSpace: 'nowrap' }}
+            sx={{ whiteSpace: 'nowrap', flex: { xs: 1, sm: 'none' } }}
           >
-            {importing ? 'Importando...' : 'Importar Empresas'}
+            {importing ? 'Importando...' : 'Importar'}
           </Button>
           <input
             type="file"
@@ -166,18 +173,21 @@ export default function EmpresaLista() {
 
       <Box
         display="flex"
-        gap={3}
+        gap={2}
         mb={2}
         flexWrap="wrap"
         alignItems="center"
-        justifyContent="center"
+        sx={{
+          flexDirection: { xs: 'column', sm: 'row' },
+          '& .MuiTextField-root': { width: { xs: '100%', sm: 'auto' } },
+        }}
       >
         <TextField
           label="Município"
           size="small"
           value={filters.cidade}
           onChange={handleFilterChange('cidade')}
-          sx={{ minWidth: 200, mx: 1 }}
+          sx={{ minWidth: { xs: '100%', sm: 200 } }}
           slotProps={{
             input: {
               startAdornment: (
@@ -191,7 +201,7 @@ export default function EmpresaLista() {
           size="small"
           value={filters.responsavel}
           onChange={handleFilterChange('responsavel')}
-          sx={{ minWidth: 200, mx: 1 }}
+          sx={{ minWidth: { xs: '100%', sm: 200 } }}
           slotProps={{
             input: {
               startAdornment: (
@@ -205,7 +215,7 @@ export default function EmpresaLista() {
           size="small"
           value={filters.numero_processo}
           onChange={handleFilterChange('numero_processo')}
-          sx={{ minWidth: 200, mx: 1 }}
+          sx={{ minWidth: { xs: '100%', sm: 200 } }}
           slotProps={{
             input: {
               startAdornment: (
@@ -219,14 +229,13 @@ export default function EmpresaLista() {
             size="small"
             onClick={clearFilters}
             startIcon={<Clear />}
-            sx={{ mx: 1 }}
           >
             Limpar filtros
           </Button>
         )}
       </Box>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
         <Table size="small">
           <TableHead>
             <TableRow>

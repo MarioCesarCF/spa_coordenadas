@@ -34,15 +34,16 @@ describe('Layout', () => {
     useOrg.mockReturnValue({ org: null, orgLoading: false })
   })
 
-  it('renderiza toolbar com nome do usuário', () => {
+  it('renderiza toolbar com nome do sistema', () => {
     useAuth.mockReturnValue({
       user: { nome: 'João Silva' },
       logout: vi.fn(),
     })
     renderWithRouter(<Layout />)
-    expect(screen.getByText('SPA Coordenadas')).toBeInTheDocument()
-    expect(screen.getByText('João Silva')).toBeInTheDocument()
-    expect(screen.getByText('Sair')).toBeInTheDocument()
+    expect(screen.getByText('Sylven')).toBeInTheDocument()
+    expect(screen.getByText('Empresas')).toBeInTheDocument()
+    expect(screen.getByText('Documentos')).toBeInTheDocument()
+    expect(screen.getByText('Organização')).toBeInTheDocument()
   })
 
   it('renderiza conteúdo da página filha', () => {
@@ -62,7 +63,10 @@ describe('Layout', () => {
     })
     renderWithRouter(<Layout />)
 
-    await userEvent.click(screen.getByText('Sair'))
+    const avatar = screen.getByText('A')
+    await userEvent.click(avatar)
+    const sair = screen.getByText('Sair')
+    await userEvent.click(sair)
     expect(mockLogout).toHaveBeenCalledTimes(1)
   })
 })

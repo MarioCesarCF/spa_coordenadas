@@ -8,6 +8,7 @@ import EmpresaForm from './pages/EmpresaForm'
 import OrganizacaoPage from './pages/OrganizacaoPage'
 import DocumentoLista from './pages/DocumentoLista'
 import DocumentoForm from './pages/DocumentoForm'
+import Perfil from './pages/Perfil'
 import { OrganizacaoProvider } from './contexts/OrganizacaoContext'
 
 const theme = createTheme({
@@ -34,6 +35,7 @@ export default function App() {
               <Route path="/documentos" element={<DocumentoLista />} />
               <Route path="/documento/novo" element={<DocumentoForm />} />
               <Route path="/documento/:id/editar" element={<DocumentoForm />} />
+              <Route path="/perfil" element={<Perfil />} />
               <Route path="/organizacao" element={<OrganizacaoPage />} />
             </Route>
           </Route>

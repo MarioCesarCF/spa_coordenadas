@@ -165,7 +165,7 @@ export default function EmpresaForm() {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" gap={1} mb={3}>
+      <Box display="flex" alignItems="center" gap={1} mb={3} flexWrap="wrap">
         <Button startIcon={<ArrowBack />} onClick={() => navigate('/')}>
           Voltar
         </Button>
@@ -341,7 +341,7 @@ export default function EmpresaForm() {
             </Grid>
             <Grid size={{ xs: 12, md: 7 }} sx={{ display: 'flex' }}>
               <Paper
-                sx={{ width: 1, minHeight: 420, overflow: 'hidden' }}
+                sx={{ width: 1, minHeight: { xs: 250, sm: 420 }, overflow: 'hidden', position: 'relative' }}
                 variant="outlined"
               >
                 <MapContainer
@@ -356,6 +356,28 @@ export default function EmpresaForm() {
                   <LocationMarker position={position} onPositionChange={handleMapClick} />
                   <MapUpdater position={position} />
                 </MapContainer>
+                {position && (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      position: 'absolute',
+                      bottom: 10,
+                      right: 10,
+                      zIndex: 1000,
+                      bgcolor: 'white',
+                      color: 'primary.main',
+                      '&:hover': { bgcolor: '#f0f0f0' },
+                      fontSize: 12,
+                      boxShadow: 2,
+                    }}
+                  >
+                    Abrir no Google Maps
+                  </Button>
+                )}
               </Paper>
             </Grid>
           </Grid>

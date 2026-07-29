@@ -116,8 +116,15 @@ export default function DocumentoLista() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexShrink: 0 }}>
-        <Box display="flex" alignItems="center" gap={1}>
+      <Box sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', sm: 'row' },
+        justifyContent: 'space-between',
+        alignItems: { xs: 'stretch', sm: 'center' },
+        gap: 1.5,
+        mb: 2,
+      }}>
+        <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
           {empresaId && (
             <Button startIcon={<ArrowBack />} onClick={() => navigate('/')}>Empresas</Button>
           )}
@@ -125,26 +132,28 @@ export default function DocumentoLista() {
             {empresaNome ? `Documentos — ${empresaNome}` : 'Documentos'}
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', gap: 1, flexShrink: 0 }}>
-          <Button variant="contained" startIcon={<Add />}
-            onClick={() => navigate(`/documento/novo${empresaId ? `?empresa=${empresaId}` : ''}`)}
-            sx={{ whiteSpace: 'nowrap' }}>
-            Novo Documento
-          </Button>
-        </Box>
+        <Button variant="contained" startIcon={<Add />}
+          onClick={() => navigate(`/documento/novo${empresaId ? `?empresa=${empresaId}` : ''}`)}
+          sx={{ whiteSpace: 'nowrap', flex: { xs: 1, sm: 'none' } }}>
+          Novo Documento
+        </Button>
       </Box>
 
-      <Box display="flex" gap={3} mb={2} flexWrap="wrap" alignItems="center" justifyContent="center">
+      <Box display="flex" gap={2} mb={2} flexWrap="wrap" alignItems="center"
+        sx={{
+          flexDirection: { xs: 'column', sm: 'row' },
+          '& .MuiTextField-root': { width: { xs: '100%', sm: 'auto' } },
+        }}>
         <TextField label="Nome do Documento" size="small" value={filters.nome}
-          onChange={handleFilterChange('nome')} sx={{ minWidth: 200, mx: 1 }}
+          onChange={handleFilterChange('nome')} sx={{ minWidth: { xs: '100%', sm: 200 } }}
           slotProps={{ input: { startAdornment: <InputAdornment position="start"><Search fontSize="small" /></InputAdornment> } }} />
         <TextField label="Vencendo até" type="date" size="small" value={filters.vencimentoAte}
-          onChange={handleFilterChange('vencimentoAte')} sx={{ minWidth: 200, mx: 1 }}
+          onChange={handleFilterChange('vencimentoAte')} sx={{ minWidth: { xs: '100%', sm: 200 } }}
           slotProps={{ inputLabel: { shrink: true } }} />
-        {hasFilters && <Button size="small" onClick={clearFilters} startIcon={<Clear />} sx={{ mx: 1 }}>Limpar filtros</Button>}
+        {hasFilters && <Button size="small" onClick={clearFilters} startIcon={<Clear />}>Limpar filtros</Button>}
       </Box>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
         <Table size="small">
           <TableHead>
             <TableRow>

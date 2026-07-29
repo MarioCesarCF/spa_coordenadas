@@ -82,7 +82,7 @@ export default function DocumentoForm() {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" gap={1} mb={3}>
+      <Box display="flex" alignItems="center" gap={1} mb={3} flexWrap="wrap">
         <Button startIcon={<ArrowBack />} onClick={() => navigate(empresaIdParam ? `/empresa/${empresaIdParam}/documentos` : '/documentos')}>
           Voltar
         </Button>

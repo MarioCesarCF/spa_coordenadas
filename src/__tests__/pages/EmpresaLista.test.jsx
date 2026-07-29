@@ -61,7 +61,7 @@ describe('EmpresaLista', () => {
 
     expect(screen.getByText('Empresas')).toBeInTheDocument()
     expect(screen.getByText('Nova Empresa')).toBeInTheDocument()
-    expect(screen.getByText('Importar Empresas')).toBeInTheDocument()
+    expect(screen.getByText('Importar')).toBeInTheDocument()
     expect(screen.getByLabelText('Município')).toBeInTheDocument()
     expect(screen.getByLabelText('Responsável')).toBeInTheDocument()
     expect(screen.getByLabelText('Nº Processo')).toBeInTheDocument()

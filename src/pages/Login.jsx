@@ -50,14 +50,15 @@ export default function Login() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
+        minHeight: '100dvh',
         bgcolor: '#f5f5f5',
+        p: 2,
       }}
     >
-      <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
-        <CardContent sx={{ p: 4 }}>
+      <Card sx={{ maxWidth: 400, width: '100%' }}>
+        <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
           <Typography variant="h5" align="center" gutterBottom fontWeight="600">
-            SPA Coordenadas
+            Sylven
           </Typography>
           <Typography variant="body2" align="center" color="text.secondary" sx={{ mb: 3 }}>
             Faça login para continuar
