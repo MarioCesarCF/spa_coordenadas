@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link as RouterLink } from 'react-router-dom'
 import {
   Box,
   Card,
@@ -10,6 +10,7 @@ import {
   Alert,
   InputAdornment,
   IconButton,
+  Link,
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { useAuth } from '../hooks/useAuth'
@@ -88,7 +89,7 @@ export default function Login() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              sx={{ mb: 3 }}
+              sx={{ mb: 1 }}
               slotProps={{
                 input: {
                   endAdornment: (
@@ -101,6 +102,11 @@ export default function Login() {
                 },
               }}
             />
+            <Box sx={{ textAlign: 'right', mb: 2 }}>
+              <Link component={RouterLink} to="/esqueci-senha" variant="body2" underline="hover">
+                Esqueceu a senha?
+              </Link>
+            </Box>
             <Button
               type="submit"
               variant="contained"

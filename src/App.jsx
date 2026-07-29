@@ -9,6 +9,8 @@ import OrganizacaoPage from './pages/OrganizacaoPage'
 import DocumentoLista from './pages/DocumentoLista'
 import DocumentoForm from './pages/DocumentoForm'
 import Perfil from './pages/Perfil'
+import EsqueciSenha from './pages/EsqueciSenha'
+import RedefinirSenha from './pages/RedefinirSenha'
 import { OrganizacaoProvider } from './contexts/OrganizacaoContext'
 
 const theme = createTheme({
@@ -26,6 +28,8 @@ export default function App() {
       <OrganizacaoProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+          <Route path="/redefinir-senha/:token" element={<RedefinirSenha />} />
           <Route element={<PrivateRoute />}>
             <Route element={<Layout />}>
               <Route path="/" element={<EmpresaLista />} />

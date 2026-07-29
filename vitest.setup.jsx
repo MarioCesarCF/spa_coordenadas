@@ -77,6 +77,7 @@ vi.mock('@mui/material', () => {
       return React.createElement('div', { ...props, ref }, children)
     }),
     Divider: mockComponent('hr', 'Divider'),
+    Link: mockComponent('a', 'Link'),
   }
   return mod
 })
