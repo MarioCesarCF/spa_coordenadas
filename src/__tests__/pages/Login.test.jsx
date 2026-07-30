@@ -40,10 +40,10 @@ describe('Login', () => {
     expect(screen.getByRole('button', { name: 'Entrar' })).toBeInTheDocument()
   })
 
-  it('não renderiza se já autenticado (redirect)', () => {
+  it('não renderiza formulário se já autenticado (redirect)', () => {
     useAuth.mockReturnValue({ login: vi.fn(), isAuthenticated: true })
     renderLogin()
-    expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true })
+    expect(screen.queryByLabelText('Email')).not.toBeInTheDocument()
   })
 
   it('mostra mensagem de erro quando login falha', async () => {

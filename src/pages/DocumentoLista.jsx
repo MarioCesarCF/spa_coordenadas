@@ -103,7 +103,10 @@ export default function DocumentoLista() {
     try {
       const { data } = await api.get(`/documento/${docId}`)
       if (data.url) {
-        window.open(data.url, '_blank')
+        const url = data.url
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+          window.open(url, '_blank')
+        }
       } else {
         window.open(`${api.defaults.baseURL}/documento/${docId}/download`, '_blank')
       }

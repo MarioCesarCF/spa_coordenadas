@@ -35,7 +35,7 @@ const STATUS_LABELS = {
 }
 
 export default function OrganizacaoPage() {
-  const { org, orgLoading, atualizarOrg } = useOrg()
+  const { org, orgLoading, criarOrg, atualizarOrg } = useOrg()
   const [membros, setMembros] = useState([])
   const [openConvite, setOpenConvite] = useState(false)
   const [openPlano, setOpenPlano] = useState(false)
@@ -126,6 +126,9 @@ export default function OrganizacaoPage() {
 
   if (orgLoading) return null
 
+  const [formCriar, setFormCriar] = useState({ nome: '', slug: '' })
+  const [criando, setCriando] = useState(false)
+
   if (!org) {
     return (
       <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
@@ -136,7 +139,44 @@ export default function OrganizacaoPage() {
           <Typography variant="body1" color="text.secondary" paragraph>
             Você ainda não tem uma organização. Crie uma para começar a gerenciar sua equipe e dados.
           </Typography>
-          <Alert severity="info" sx={{ mb: 2 }}>
+          <Stack spacing={2} sx={{ mt: 3 }}>
+            <TextField
+              label="Nome da organização"
+              fullWidth
+              value={formCriar.nome}
+              onChange={(e) => setFormCriar({
+                ...formCriar,
+                nome: e.target.value,
+                slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+              })}
+            />
+            <TextField
+              label="Slug (URL amigável)"
+              fullWidth
+              value={formCriar.slug}
+              onChange={(e) => setFormCriar({ ...formCriar, slug: e.target.value })}
+              helperText="Usado para identificar sua organização na URL"
+            />
+            <Button
+              variant="contained"
+              size="large"
+              disabled={!formCriar.nome || !formCriar.slug || criando}
+              onClick={async () => {
+                setCriando(true)
+                try {
+                  await criarOrg(formCriar.nome, formCriar.slug)
+                } catch (err) {
+                  const msg = err.response?.data?.message || 'Erro ao criar organização'
+                  setSnack({ open: true, message: msg, severity: 'error' })
+                } finally {
+                  setCriando(false)
+                }
+              }}
+            >
+              {criando ? 'Criando...' : 'Criar Organização'}
+            </Button>
+          </Stack>
+          <Alert severity="info" sx={{ mt: 2 }}>
             Se você já possui uma organização, peça ao administrador para te adicionar.
           </Alert>
         </Paper>

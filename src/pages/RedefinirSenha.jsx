@@ -25,8 +25,8 @@ export default function RedefinirSenha() {
       setError('As senhas não conferem.')
       return
     }
-    if (novaSenha.length < 3) {
-      setError('A senha deve ter no mínimo 3 caracteres.')
+    if (novaSenha.length < 8 || !/[A-Z]/.test(novaSenha) || !/[0-9]/.test(novaSenha)) {
+      setError('A senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um número.')
       return
     }
 

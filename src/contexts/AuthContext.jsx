@@ -10,8 +10,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user')
-    const storedAccessToken = localStorage.getItem('accessToken')
-    if (storedUser && storedAccessToken) {
+    if (storedUser) {
       setUser(JSON.parse(storedUser))
     }
     setLoading(false)
@@ -27,13 +26,9 @@ export function AuthProvider({ children }) {
   }, [])
 
   const logout = useCallback(async () => {
-    const refreshToken = localStorage.getItem('refreshToken')
     try {
-      if (refreshToken) {
-        await api.post('/usuario/logout', { refreshToken })
-      }
+      await api.post('/usuario/logout')
     } catch {
-      // Ignore errors on logout
     } finally {
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')

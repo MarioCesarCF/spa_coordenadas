@@ -66,8 +66,6 @@ describe('AuthContext', () => {
   })
 
   it('restaura sessão do localStorage', async () => {
-    localStorage.setItem('accessToken', 'tok')
-    localStorage.setItem('refreshToken', 'ref')
     localStorage.setItem('user', JSON.stringify({ nome: 'João' }))
     renderWithProvider()
     await waitFor(() => {
@@ -76,11 +74,9 @@ describe('AuthContext', () => {
     expect(screen.getByTestId('auth-status').textContent).toBe('authenticated')
   })
 
-  it('login bem-sucedido salva tokens e atualiza estado', async () => {
+  it('login bem-sucedido salva user e atualiza estado', async () => {
     api.post.mockResolvedValueOnce({
       data: {
-        accessToken: 'new-tok',
-        refreshToken: 'new-ref',
         user: { nome: 'Maria' },
       },
     })
@@ -92,8 +88,6 @@ describe('AuthContext', () => {
       expect(screen.getByTestId('user-name').textContent).toBe('Maria')
     })
     expect(screen.getByTestId('auth-status').textContent).toBe('authenticated')
-    expect(localStorage.getItem('accessToken')).toBe('new-tok')
-    expect(localStorage.getItem('refreshToken')).toBe('new-ref')
     expect(localStorage.getItem('user')).toBe(JSON.stringify({ nome: 'Maria' }))
   })
 
@@ -108,9 +102,7 @@ describe('AuthContext', () => {
     })
   })
 
-  it('logout limpa localStorage e estado', async () => {
-    localStorage.setItem('accessToken', 'tok')
-    localStorage.setItem('refreshToken', 'ref')
+  it('logout limpa user do localStorage e estado', async () => {
     localStorage.setItem('user', JSON.stringify({ nome: 'João' }))
     api.post.mockResolvedValueOnce({})
 
@@ -122,8 +114,6 @@ describe('AuthContext', () => {
     await waitFor(() => {
       expect(screen.getByTestId('auth-status').textContent).toBe('not-authenticated')
     })
-    expect(localStorage.getItem('accessToken')).toBeNull()
-    expect(localStorage.getItem('refreshToken')).toBeNull()
     expect(localStorage.getItem('user')).toBeNull()
   })
 })

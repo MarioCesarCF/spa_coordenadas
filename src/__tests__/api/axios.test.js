@@ -29,7 +29,7 @@ let axiosCreateMock
 
 beforeAll(async () => {
   delete window.location
-  window.location = { href: '' }
+  window.location = { href: '', pathname: '/' }
 
   await import('../../api/axios')
 
@@ -45,21 +45,21 @@ beforeEach(() => {
 })
 
 describe('src/api/axios.js', () => {
-  it('cria axios com baseURL correta', () => {
-    expect(axiosCreateMock).toHaveBeenCalledWith(
-      expect.objectContaining({ baseURL: 'https://api-coordenadas-w03m.onrender.com' })
-    )
+  it('cria axios com baseURL e withCredentials', () => {
+    const callArgs = axiosCreateMock.mock.calls[0][0]
+    expect(callArgs.baseURL).toBeTruthy()
+    expect(callArgs.withCredentials).toBe(true)
   })
 
   describe('request interceptor', () => {
-    it('adiciona token Bearer quando existe no localStorage', () => {
-      localStorage.setItem('accessToken', 'my-token')
+    it('adiciona Authorization header quando token existe', () => {
+      localStorage.setItem('accessToken', 'test-token')
       const config = { headers: {} }
       const result = reqHandler(config)
-      expect(result.headers.Authorization).toBe('Bearer my-token')
+      expect(result.headers.Authorization).toBe('Bearer test-token')
     })
 
-    it('não adiciona Authorization se não há token', () => {
+    it('nao adiciona Authorization quando token ausente', () => {
       const config = { headers: {} }
       const result = reqHandler(config)
       expect(result.headers.Authorization).toBeUndefined()
@@ -82,25 +82,22 @@ describe('src/api/axios.js', () => {
       await expect(resErrHandler(error)).rejects.toBe(error)
     })
 
-    it('tenta renovar token se refreshToken existe', async () => {
-      mockAxiosPost.mockResolvedValueOnce({ data: { accessToken: 'new-token' } })
-      localStorage.setItem('refreshToken', 'my-refresh')
+    it('tenta renovar token via refresh', async () => {
+      apiInstance.post.mockResolvedValueOnce({ data: { accessToken: 'new-token' } })
 
       const error = { response: { status: 401 }, config: { url: '/empresa', _retry: false, headers: {} } }
       resErrHandler(error)
 
       await vi.waitFor(() => {
-        expect(mockAxiosPost).toHaveBeenCalledWith('/usuario/refresh', {
-          refreshToken: 'my-refresh',
-        })
+        expect(apiInstance.post).toHaveBeenCalledWith('/usuario/refresh', {})
       })
     })
 
-    it('redireciona para /login se não há refreshToken', async () => {
+    it('redireciona para /login se refresh falha', async () => {
+      apiInstance.post.mockRejectedValueOnce(new Error('fail'))
       const error = { response: { status: 401 }, config: { url: '/empresa' } }
       await expect(resErrHandler(error)).rejects.toBe(error)
       expect(window.location.href).toBe('/login')
-      expect(localStorage.getItem('accessToken')).toBeNull()
     })
   })
 })

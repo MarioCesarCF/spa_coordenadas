@@ -26,6 +26,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import DescriptionIcon from '@mui/icons-material/Description'
 import PersonIcon from '@mui/icons-material/Person'
 import BusinessIcon from '@mui/icons-material/Business'
+import CalculateIcon from '@mui/icons-material/Calculate'
 import MenuIcon from '@mui/icons-material/Menu'
 import HomeIcon from '@mui/icons-material/Home'
 import { useState } from 'react'
@@ -49,6 +50,7 @@ export default function Layout() {
   const navItems = [
     { label: 'Empresas', icon: <HomeIcon />, path: '/' },
     { label: 'Documentos', icon: <DescriptionIcon />, path: '/documentos' },
+    { label: 'Cálculos', icon: <CalculateIcon />, path: '/calculos' },
     { label: 'Organização', icon: <BusinessIcon />, path: '/organizacao' },
   ]
 

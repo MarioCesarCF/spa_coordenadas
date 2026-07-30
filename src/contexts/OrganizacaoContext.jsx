@@ -20,7 +20,10 @@ export function OrganizacaoProvider({ children }) {
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken')
-    if (accessToken) {
+    const isPublicPage = ['/login', '/esqueci-senha', '/redefinir-senha'].some(
+      (p) => window.location.pathname.startsWith(p)
+    )
+    if (accessToken && !isPublicPage) {
       carregarOrg()
     } else {
       setOrgLoading(false)
@@ -29,7 +32,11 @@ export function OrganizacaoProvider({ children }) {
 
   const criarOrg = useCallback(async (nome, slug) => {
     const { data } = await api.post('/organizacao', { nome, slug })
-    setOrg(data)
+    setOrg(data.organizacao)
+    localStorage.setItem('accessToken', data.accessToken)
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}')
+    storedUser.organizacao = data.organizacao._id
+    localStorage.setItem('user', JSON.stringify(storedUser))
     return data
   }, [])
 

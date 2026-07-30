@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link as RouterLink } from 'react-router-dom'
+import { useNavigate, Navigate, Link as RouterLink } from 'react-router-dom'
 import {
   Box,
   Card,
@@ -25,8 +25,7 @@ export default function Login() {
   const navigate = useNavigate()
 
   if (isAuthenticated) {
-    navigate('/', { replace: true })
-    return null
+    return <Navigate to="/" replace />
   }
 
   const handleSubmit = async (e) => {

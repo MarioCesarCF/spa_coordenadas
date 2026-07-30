@@ -11,6 +11,10 @@ import DocumentoForm from './pages/DocumentoForm'
 import Perfil from './pages/Perfil'
 import EsqueciSenha from './pages/EsqueciSenha'
 import RedefinirSenha from './pages/RedefinirSenha'
+import CalculoLista from './pages/CalculoLista'
+import CalculoForm from './pages/CalculoForm'
+import CalculoImportar from './pages/CalculoImportar'
+import CalculoResultados from './pages/CalculoResultados'
 import { OrganizacaoProvider } from './contexts/OrganizacaoContext'
 
 const theme = createTheme({
@@ -41,6 +45,11 @@ export default function App() {
               <Route path="/documento/:id/editar" element={<DocumentoForm />} />
               <Route path="/perfil" element={<Perfil />} />
               <Route path="/organizacao" element={<OrganizacaoPage />} />
+              <Route path="/calculos" element={<CalculoLista />} />
+              <Route path="/calculos/novo" element={<CalculoForm />} />
+              <Route path="/calculos/:id" element={<CalculoResultados />} />
+              <Route path="/calculos/:id/importar" element={<CalculoImportar />} />
+              <Route path="/calculos/:id/editar" element={<CalculoForm />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
