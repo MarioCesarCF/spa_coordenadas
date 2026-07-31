@@ -76,6 +76,14 @@ Em produção (Render), a própria plataforma define `VITE_API_URL` como env var
 ## Related project
 Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start with `npm run dev` there first.
 
+### 2026-07-31 — Tema dark/light + toggle no header
+- Criado `src/contexts/ThemeContext.jsx`: `ThemeProvider`, `useThemeMode` e `lightTheme`; modo persistido em `localStorage` (`sylven_theme_mode`)
+- `main.jsx` envolve a app com o ThemeProvider; `App.jsx` mantém `CssBaseline` e força tema **light** apenas na rota `/login` (será redesenhada à parte)
+- Toggle (DarkMode/LightMode) no AppBar; toda a app segue o tema via MUI
+- Cores fixas adaptadas: removido `background-color` fixo do `index.css` (CssBaseline cuida), `EsqueciSenha`/`RedefinirSenha` usam `background.default`, botão do mapa em `EmpresaForm` usa `background.paper`/`action.hover`
+- Removidos `sylven-pin.svg`, `sylven-monogram.svg` e `preview-logos.html` (referência não usada)
+- 48 testes passando; build OK
+
 ### 2026-07-31 — Adiciona logo Sylven (opção B) no header, login e favicon
 - Criada logo SVG "Árvore com mira" (`public/logos/sylven-tree.svg`, `#2e7d32`) e componente `src/components/Logo.jsx` (SVG inline com `currentColor`)
 - Logo branca no AppBar ao lado do nome, verde no drawer e no card de Login

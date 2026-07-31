@@ -368,9 +368,9 @@ export default function EmpresaForm() {
                       bottom: 10,
                       right: 10,
                       zIndex: 1000,
-                      bgcolor: 'white',
+                      bgcolor: 'background.paper',
                       color: 'primary.main',
-                      '&:hover': { bgcolor: '#f0f0f0' },
+                      '&:hover': { bgcolor: 'action.hover' },
                       fontSize: 12,
                       boxShadow: 2,
                     }}

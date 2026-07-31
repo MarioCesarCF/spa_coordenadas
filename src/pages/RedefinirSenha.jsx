@@ -49,7 +49,7 @@ export default function RedefinirSenha() {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100dvh',
-        bgcolor: '#f5f5f5',
+        bgcolor: 'background.default',
         p: 2,
       }}
     >

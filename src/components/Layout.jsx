@@ -30,13 +30,17 @@ import BusinessIcon from '@mui/icons-material/Business'
 import CalculateIcon from '@mui/icons-material/Calculate'
 import MenuIcon from '@mui/icons-material/Menu'
 import HomeIcon from '@mui/icons-material/Home'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useOrg } from '../contexts/OrganizacaoContext'
+import { useThemeMode } from '../contexts/ThemeContext'
 
 export default function Layout() {
   const { user, logout } = useAuth()
   const { org } = useOrg()
+  const { mode, toggleTheme } = useThemeMode()
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -130,6 +134,15 @@ export default function Layout() {
               {item.label}
             </Button>
           ))}
+
+          <IconButton
+            color="inherit"
+            onClick={toggleTheme}
+            aria-label={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
+            sx={{ mr: 1 }}
+          >
+            {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+          </IconButton>
 
           <Avatar
             sx={{
