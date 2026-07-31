@@ -127,11 +127,11 @@ export default function DocumentoLista() {
         gap: 1.5,
         mb: 2,
       }}>
-        <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
           {empresaId && (
             <Button startIcon={<ArrowBack />} onClick={() => navigate('/')}>Empresas</Button>
           )}
-          <Typography variant="h5" fontWeight="600">
+          <Typography variant="h5" sx={{ fontWeight: 600 }}>
             {empresaNome ? `Documentos — ${empresaNome}` : 'Documentos'}
           </Typography>
         </Box>
@@ -142,11 +142,15 @@ export default function DocumentoLista() {
         </Button>
       </Box>
 
-      <Box display="flex" gap={2} mb={2} flexWrap="wrap" alignItems="center"
-        sx={{
-          flexDirection: { xs: 'column', sm: 'row' },
-          '& .MuiTextField-root': { width: { xs: '100%', sm: 'auto' } },
-        }}>
+      <Box sx={{
+        display: 'flex',
+        gap: 2,
+        mb: 2,
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        flexDirection: { xs: 'column', sm: 'row' },
+        '& .MuiTextField-root': { width: { xs: '100%', sm: 'auto' } },
+      }}>
         <TextField label="Nome do Documento" size="small" value={filters.nome}
           onChange={handleFilterChange('nome')} sx={{ minWidth: { xs: '100%', sm: 200 } }}
           slotProps={{ input: { startAdornment: <InputAdornment position="start"><Search fontSize="small" /></InputAdornment> } }} />
@@ -186,7 +190,7 @@ export default function DocumentoLista() {
                       {doc.tamanho ? `${(doc.tamanho / 1024 / 1024).toFixed(2)} MB` : '—'}
                     </TableCell>
                     <TableCell>
-                      <Box display="flex" alignItems="center" gap={1}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         {formatDate(doc.data_vencimento)}
                         {urg.cor !== 'default' && (
                           <Chip label={urg.label} size="small" color={urg.cor} variant="outlined" />

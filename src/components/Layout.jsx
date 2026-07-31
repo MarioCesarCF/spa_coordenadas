@@ -57,7 +57,7 @@ export default function Layout() {
   const drawer = (
     <Box sx={{ width: 250 }} onClick={() => setDrawerOpen(false)}>
       <Box sx={{ p: 2 }}>
-        <Typography variant="h6" fontWeight={700}>Sylven</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>Sylven</Typography>
       </Box>
       <Divider />
       <List>

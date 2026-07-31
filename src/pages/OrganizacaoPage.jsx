@@ -188,7 +188,7 @@ export default function OrganizacaoPage() {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom fontWeight={600}>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
         Configurações da Organização
       </Typography>
 
@@ -206,7 +206,7 @@ export default function OrganizacaoPage() {
                 Alterar Plano
               </Button>
             </Box>
-            <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
+            <Stack direction="row" spacing={2} sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
               <Chip
                 label={PLANO_LABELS[org.plano] || org.plano}
                 color={org.plano === 'free' ? 'default' : 'primary'}
@@ -226,7 +226,7 @@ export default function OrganizacaoPage() {
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 Limites do plano:
               </Typography>
-              <Stack direction="row" spacing={3} flexWrap="wrap">
+              <Stack direction="row" spacing={3} sx={{ flexWrap: 'wrap' }}>
                 <Typography variant="body2">
                   Empresas: <strong>{org.config_limites.max_empresas === 99999 ? 'Ilimitado' : org.config_limites.max_empresas}</strong>
                 </Typography>
@@ -384,8 +384,8 @@ export default function OrganizacaoPage() {
                       sx={{ position: 'absolute', top: -10, right: 8 }}
                     />
                   )}
-                  <Typography variant="h6" fontWeight={700}>{plano.label}</Typography>
-                  <Typography variant="h5" color="primary" fontWeight={700} sx={{ my: 1 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 700 }}>{plano.label}</Typography>
+                  <Typography variant="h5" color="primary" sx={{ fontWeight: 700, my: 1 }}>
                     {plano.preco}
                   </Typography>
                   <Divider sx={{ my: 1 }} />

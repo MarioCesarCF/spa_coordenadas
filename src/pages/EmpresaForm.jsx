@@ -157,7 +157,7 @@ export default function EmpresaForm() {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" mt={4}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
         <CircularProgress />
       </Box>
     )
@@ -165,11 +165,11 @@ export default function EmpresaForm() {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" gap={1} mb={3} flexWrap="wrap">
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3, flexWrap: 'wrap' }}>
         <Button startIcon={<ArrowBack />} onClick={() => navigate('/')}>
           Voltar
         </Button>
-        <Typography variant="h5" fontWeight="600">
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>
           {isEditing ? 'Editar Empresa' : 'Nova Empresa'}
         </Typography>
       </Box>
@@ -182,10 +182,10 @@ export default function EmpresaForm() {
 
       <Paper sx={{ p: 3 }}>
         <Box component="form" onSubmit={handleSubmit}>
-          <Typography variant="subtitle1" fontWeight="600" gutterBottom>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }} gutterBottom>
             Dados Gerais
           </Typography>
-          <Grid container spacing={2} mb={3}>
+          <Grid container spacing={2} sx={{ mb: 3 }}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 label="Nome "
@@ -223,10 +223,10 @@ export default function EmpresaForm() {
             </Grid>
           </Grid>
 
-          <Typography variant="subtitle1" fontWeight="600" gutterBottom>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }} gutterBottom>
             Processo
           </Typography>
-          <Grid container spacing={2} mb={3}>
+          <Grid container spacing={2} sx={{ mb: 3 }}>
             <Grid size={{ xs: 12, sm: 4 }}>
               <TextField
                 label="Nº Processo"
@@ -287,10 +287,10 @@ export default function EmpresaForm() {
             </Grid>
           </Grid>
 
-          <Typography variant="subtitle1" fontWeight="600" gutterBottom>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }} gutterBottom>
             Coordenadas
           </Typography>
-          <Grid container spacing={2} mb={3} alignItems="stretch">
+          <Grid container spacing={2} sx={{ mb: 3, alignItems: 'stretch' }}>
             <Grid size={{ xs: 12, md: 5 }}>
               <Grid container spacing={2} direction="column">
                 <Grid>
@@ -382,7 +382,7 @@ export default function EmpresaForm() {
             </Grid>
           </Grid>
 
-          <Box display="flex" gap={2} justifyContent="flex-end">
+          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
             <Button variant="outlined" onClick={() => navigate('/')}>
               Cancelar
             </Button>

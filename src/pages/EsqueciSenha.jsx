@@ -40,7 +40,7 @@ export default function EsqueciSenha() {
     >
       <Card sx={{ maxWidth: 440, width: '100%' }}>
         <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
-          <Typography variant="h5" align="center" gutterBottom fontWeight="600">
+          <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 600 }}>
             Sylven
           </Typography>
 

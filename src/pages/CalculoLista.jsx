@@ -57,7 +57,7 @@ export default function CalculoLista() {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h5" fontWeight="600">Projetos de Cálculo Florestal</Typography>
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>Projetos de Cálculo Florestal</Typography>
         <Button variant="contained" startIcon={<Add />} onClick={() => navigate('/calculos/novo')}>
           Novo Projeto
         </Button>

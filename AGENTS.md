@@ -76,6 +76,12 @@ Em produção (Render), a própria plataforma define `VITE_API_URL` como env var
 ## Related project
 Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start with `npm run dev` there first.
 
+### 2026-07-31 — Migra system props diretas para `sx` (MUI v9)
+- MUI v9 removou o suporte a system props diretas (`display="flex"`, `gap={2}`, `fontWeight`, `mb={3}`...): elas eram repassadas ao DOM como atributos inválidos e ignoradas
+- Toda prop de estilo avulsa em Box, Stack, Grid, Typography, TextField foi movida para `sx={{...}}`
+- Props legítimas de componente foram mantidas (`position` de AppBar/InputAdornment, `fontSize`/`color` de ícones, `direction`/`spacing` do Stack, `maxWidth`/`fullWidth`, `variant`/`color`/`align`/`gutterBottom` do Typography)
+- 48 testes passando; build OK
+
 ### 2026-07-31 — Corrige 404 no F5 em produção (Vercel)
 - Ao dar refresh em rotas como `/login`, o Vercel retornava 404 porque `BrowserRouter` usa URLs sem `#` e o servidor estático não encontrava o arquivo físico
 - Criado `vercel.json` na raiz com rewrite `/(.*) → /index.html` (fallback SPA)

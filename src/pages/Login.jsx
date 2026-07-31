@@ -57,7 +57,7 @@ export default function Login() {
     >
       <Card sx={{ maxWidth: 400, width: '100%' }}>
         <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
-          <Typography variant="h5" align="center" gutterBottom fontWeight="600">
+          <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 600 }}>
             Sylven
           </Typography>
           <Typography variant="body2" align="center" color="text.secondary" sx={{ mb: 3 }}>

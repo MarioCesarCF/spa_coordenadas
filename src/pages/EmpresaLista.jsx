@@ -140,7 +140,7 @@ export default function EmpresaLista() {
         gap: 1.5,
         mb: 2,
       }}>
-        <Typography variant="h5" fontWeight="600">
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>
           Empresas
         </Typography>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
@@ -172,14 +172,10 @@ export default function EmpresaLista() {
       </Box>
 
       <Box
-        display="flex"
-        gap={2}
-        mb={2}
-        flexWrap="wrap"
-        alignItems="center"
         sx={{
           flexDirection: { xs: 'column', sm: 'row' },
           '& .MuiTextField-root': { width: { xs: '100%', sm: 'auto' } },
+          display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center', marginBottom: 2
         }}
       >
         <TextField
@@ -187,7 +183,7 @@ export default function EmpresaLista() {
           size="small"
           value={filters.cidade}
           onChange={handleFilterChange('cidade')}
-          sx={{ minWidth: { xs: '100%', sm: 200 } }}
+          sx={{ minWidth: { xs: '100%', sm: 200 }, mb: 2 }}
           slotProps={{
             input: {
               startAdornment: (
@@ -201,7 +197,7 @@ export default function EmpresaLista() {
           size="small"
           value={filters.responsavel}
           onChange={handleFilterChange('responsavel')}
-          sx={{ minWidth: { xs: '100%', sm: 200 } }}
+          sx={{ minWidth: { xs: '100%', sm: 200 }, mb: 2, mr: 2 }}
           slotProps={{
             input: {
               startAdornment: (
@@ -215,7 +211,7 @@ export default function EmpresaLista() {
           size="small"
           value={filters.numero_processo}
           onChange={handleFilterChange('numero_processo')}
-          sx={{ minWidth: { xs: '100%', sm: 200 } }}
+          sx={{ minWidth: { xs: '100%', sm: 200 }, mb: 2 }}
           slotProps={{
             input: {
               startAdornment: (

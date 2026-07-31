@@ -94,7 +94,7 @@ export default function CalculoForm() {
         <Button startIcon={<ArrowBack />} onClick={() => navigate('/calculos')}>
           Voltar
         </Button>
-        <Typography variant="h5" fontWeight="600">
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>
           {isEdit ? 'Editar Projeto' : 'Novo Projeto de Cálculo'}
         </Typography>
       </Box>

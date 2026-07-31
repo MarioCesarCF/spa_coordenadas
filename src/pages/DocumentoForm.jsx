@@ -82,11 +82,11 @@ export default function DocumentoForm() {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" gap={1} mb={3} flexWrap="wrap">
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3, flexWrap: 'wrap' }}>
         <Button startIcon={<ArrowBack />} onClick={() => navigate(empresaIdParam ? `/empresa/${empresaIdParam}/documentos` : '/documentos')}>
           Voltar
         </Button>
-        <Typography variant="h5" fontWeight="600">
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>
           {isEditing ? 'Editar Documento' : 'Novo Documento'}
         </Typography>
       </Box>
@@ -166,7 +166,7 @@ export default function DocumentoForm() {
             sx={{ mb: 3 }}
           />
 
-          <Box display="flex" gap={2} justifyContent="flex-end">
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
             <Button variant="outlined" onClick={() => navigate('/documentos')}>
               Cancelar
             </Button>

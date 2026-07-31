@@ -101,13 +101,13 @@ export default function CalculoImportar() {
         <Button startIcon={<ArrowBack />} onClick={() => navigate('/calculos')}>
           Voltar
         </Button>
-        <Typography variant="h5" fontWeight="600">
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>
           Importar Dados — {projeto?.nome}
         </Typography>
       </Box>
 
       <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="subtitle1" gutterBottom fontWeight="500">
+        <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 500 }}>
           Selecione a planilha de campo
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -152,9 +152,9 @@ export default function CalculoImportar() {
 
       {result && (
         <Paper sx={{ p: 3, mb: 3 }}>
-          <Typography variant="subtitle1" gutterBottom fontWeight="500">
-            Dados importados com sucesso
-          </Typography>
+        <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 500 }}>
+          Dados importados com sucesso
+        </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             As árvores foram importadas. Agora você pode processar os cálculos
             ou voltar e ver os resultados.

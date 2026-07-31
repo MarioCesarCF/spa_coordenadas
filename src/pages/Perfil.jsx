@@ -56,13 +56,13 @@ export default function Perfil() {
 
   return (
     <Box sx={{ maxWidth: 700, mx: 'auto' }}>
-      <Typography variant="h4" gutterBottom fontWeight={600}>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
         Meu Perfil
       </Typography>
 
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Stack direction="row" spacing={3} alignItems="center" mb={2}>
+          <Stack direction="row" spacing={3} sx={{ alignItems: 'center', mb: 2 }}>
             <Avatar
               sx={{
                 width: 72,

@@ -70,7 +70,7 @@ export default function CalculoResultados() {
         <Button startIcon={<ArrowBack />} onClick={() => navigate('/calculos')}>
           Voltar
         </Button>
-        <Typography variant="h5" fontWeight="600" sx={{ flex: 1 }}>
+        <Typography variant="h5" sx={{ fontWeight: 600, flex: 1 }}>
           {projeto.nome}
         </Typography>
         <Chip
@@ -142,7 +142,7 @@ export default function CalculoResultados() {
         </Grid>
 
         <Paper sx={{ p: 2, mb: 2 }}>
-          <Typography variant="subtitle1" fontWeight="500" gutterBottom>Resumo das Parcelas</Typography>
+          <Typography variant="subtitle1" sx={{ fontWeight: 500 }} gutterBottom>Resumo das Parcelas</Typography>
           <TableContainer>
             <Table size="small">
               <TableHead>
@@ -195,7 +195,7 @@ export default function CalculoResultados() {
         {parcelas?.estatisticas ? (
           <>
             <Paper sx={{ p: 2, mb: 2 }}>
-              <Typography variant="subtitle1" fontWeight="500" gutterBottom>Estatística Amostral</Typography>
+              <Typography variant="subtitle1" sx={{ fontWeight: 500 }} gutterBottom>Estatística Amostral</Typography>
               <TableContainer>
                 <Table size="small">
                   <TableBody>
@@ -214,7 +214,7 @@ export default function CalculoResultados() {
 
             {suficiencia && (
               <Paper sx={{ p: 2 }}>
-                <Typography variant="subtitle1" fontWeight="500" gutterBottom>Suficiência Amostral</Typography>
+                <Typography variant="subtitle1" sx={{ fontWeight: 500 }} gutterBottom>Suficiência Amostral</Typography>
                 <TableContainer>
                   <Table size="small">
                     <TableBody>
@@ -244,7 +244,7 @@ export default function CalculoResultados() {
       <TabPanel value={tab} index={2}>
         {fitossociologia?.length > 0 ? (
           <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle1" fontWeight="500" gutterBottom>
+            <Typography variant="subtitle1" sx={{ fontWeight: 500 }} gutterBottom>
               Parâmetros Fitossociológicos
             </Typography>
             <TableContainer>
@@ -269,7 +269,7 @@ export default function CalculoResultados() {
                         <Typography variant="body2">
                           <em>{sp.nome_cientifico || sp.nome_comum || 'Desconhecida'}</em>
                           {sp.nome_comum && sp.nome_cientifico && (
-                            <Typography variant="caption" color="text.secondary" display="block">
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
                               {sp.nome_comum}
                             </Typography>
                           )}
@@ -298,7 +298,7 @@ export default function CalculoResultados() {
       <TabPanel value={tab} index={3}>
         {distribuicaoDiametrica?.length > 0 ? (
           <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle1" fontWeight="500" gutterBottom>
+            <Typography variant="subtitle1" sx={{ fontWeight: 500 }} gutterBottom>
               Distribuição Diamétrica
             </Typography>
             <TableContainer>
