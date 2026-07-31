@@ -1,4 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom'
+import Logo from './Logo'
 import {
   AppBar,
   Toolbar,
@@ -56,7 +57,8 @@ export default function Layout() {
 
   const drawer = (
     <Box sx={{ width: 250 }} onClick={() => setDrawerOpen(false)}>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Logo sx={{ width: 28, height: 28, color: 'primary.main' }} />
         <Typography variant="h6" sx={{ fontWeight: 700 }}>Sylven</Typography>
       </Box>
       <Divider />
@@ -98,13 +100,15 @@ export default function Layout() {
             </IconButton>
           )}
 
-          <Typography
-            variant="h6"
-            sx={{ cursor: 'pointer', flexGrow: 1, fontWeight: 700, letterSpacing: 1 }}
+          <Box
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, flexGrow: 1, cursor: 'pointer', color: '#fff' }}
             onClick={() => navigate('/')}
           >
-            {isMobile ? 'Sylv' : 'Sylven'}
-          </Typography>
+            <Logo sx={{ width: 28, height: 28 }} />
+            <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: 1 }}>
+              {isMobile ? 'Sylv' : 'Sylven'}
+            </Typography>
+          </Box>
 
           {org && !isMobile && (
             <Chip

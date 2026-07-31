@@ -76,6 +76,13 @@ Em produção (Render), a própria plataforma define `VITE_API_URL` como env var
 ## Related project
 Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start with `npm run dev` there first.
 
+### 2026-07-31 — Adiciona logo Sylven (opção B) no header, login e favicon
+- Criada logo SVG "Árvore com mira" (`public/logos/sylven-tree.svg`, `#2e7d32`) e componente `src/components/Logo.jsx` (SVG inline com `currentColor`)
+- Logo branca no AppBar ao lado do nome, verde no drawer e no card de Login
+- Favicon: index.html agora usa `/logos/sylven-tree.svg` (substitui PNG antigo)
+- Demais conceitos mantidos em `public/logos/` + `public/preview-logos.html` para referência
+- 48 testes passando; build OK
+
 ### 2026-07-31 — Migra system props diretas para `sx` (MUI v9)
 - MUI v9 removou o suporte a system props diretas (`display="flex"`, `gap={2}`, `fontWeight`, `mb={3}`...): elas eram repassadas ao DOM como atributos inválidos e ignoradas
 - Toda prop de estilo avulsa em Box, Stack, Grid, Typography, TextField foi movida para `sx={{...}}`

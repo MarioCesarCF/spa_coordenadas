@@ -13,6 +13,7 @@ import {
   Link,
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import Logo from '../components/Logo'
 import { useAuth } from '../hooks/useAuth'
 
 export default function Login() {
@@ -57,6 +58,9 @@ export default function Login() {
     >
       <Card sx={{ maxWidth: 400, width: '100%' }}>
         <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1, color: 'primary.main' }}>
+            <Logo sx={{ width: 56, height: 56 }} />
+          </Box>
           <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 600 }}>
             Sylven
           </Typography>
