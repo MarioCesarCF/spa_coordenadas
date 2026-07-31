@@ -76,6 +76,11 @@ Em produção (Render), a própria plataforma define `VITE_API_URL` como env var
 ## Related project
 Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start with `npm run dev` there first.
 
+### 2026-07-31 — Corrige 404 no F5 em produção (Vercel)
+- Ao dar refresh em rotas como `/login`, o Vercel retornava 404 porque `BrowserRouter` usa URLs sem `#` e o servidor estático não encontrava o arquivo físico
+- Criado `vercel.json` na raiz com rewrite `/(.*) → /index.html` (fallback SPA)
+- Commit `2e168a9`; deploy automático no Vercel via GitHub
+
 ## Change documentation
 Every major feature or structural change **must** be logged at the bottom of this file in reverse chronological order (newest first). Use the following format:
 
