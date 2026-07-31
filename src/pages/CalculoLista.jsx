@@ -7,6 +7,7 @@ import {
 } from '@mui/material'
 import { Add, Delete, CloudUpload, BarChart, Visibility } from '@mui/icons-material'
 import api from '../api/axios'
+import { useOrg } from '../contexts/OrganizacaoContext'
 
 const STATUS_MAP = {
   rascunho: { label: 'Rascunho', color: 'default' },
@@ -15,11 +16,14 @@ const STATUS_MAP = {
 }
 
 export default function CalculoLista() {
+  const { org } = useOrg()
   const [projetos, setProjetos] = useState([])
   const [loading, setLoading] = useState(true)
   const [deleteDialog, setDeleteDialog] = useState({ open: false, id: null, nome: '' })
   const [snack, setSnack] = useState({ open: false, severity: 'success', message: '' })
   const navigate = useNavigate()
+
+  const calculosHabilitados = !org || !!org.config_limites?.calculos_habilitados
 
   const fetchProjetos = useCallback(async () => {
     setLoading(true)
@@ -56,11 +60,21 @@ export default function CalculoLista() {
 
   return (
     <Box>
+      {!calculosHabilitados && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          Cálculos florestais não estão incluídos no seu plano atual. Faça upgrade para criar ou processar projetos.
+        </Alert>
+      )}
+
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h5" sx={{ fontWeight: 600 }}>Projetos de Cálculo Florestal</Typography>
-        <Button variant="contained" startIcon={<Add />} onClick={() => navigate('/calculos/novo')}>
-          Novo Projeto
-        </Button>
+        <Tooltip title={calculosHabilitados ? '' : 'Disponível nos planos Profissional e Enterprise'}>
+          <span>
+            <Button variant="contained" startIcon={<Add />} onClick={() => navigate('/calculos/novo')} disabled={!calculosHabilitados}>
+              Novo Projeto
+            </Button>
+          </span>
+        </Tooltip>
       </Box>
 
       {projetos.length === 0 ? (
@@ -68,9 +82,13 @@ export default function CalculoLista() {
           <Typography color="text.secondary" gutterBottom>
             Nenhum projeto de cálculo ainda.
           </Typography>
-          <Button variant="outlined" startIcon={<Add />} onClick={() => navigate('/calculos/novo')}>
-            Criar primeiro projeto
-          </Button>
+          <Tooltip title={calculosHabilitados ? '' : 'Disponível nos planos Profissional e Enterprise'}>
+            <span>
+              <Button variant="outlined" startIcon={<Add />} onClick={() => navigate('/calculos/novo')} disabled={!calculosHabilitados}>
+                Criar primeiro projeto
+              </Button>
+            </span>
+          </Tooltip>
         </Paper>
       ) : (
         <TableContainer component={Paper}>
@@ -101,10 +119,12 @@ export default function CalculoLista() {
                   <TableCell>{new Date(p.criado_em).toLocaleDateString('pt-BR')}</TableCell>
                   <TableCell align="right">
                     {p.status === 'rascunho' && (
-                      <Tooltip title="Importar dados">
-                        <IconButton onClick={() => navigate(`/calculos/${p._id}/importar`)}>
-                          <CloudUpload />
-                        </IconButton>
+                      <Tooltip title={calculosHabilitados ? 'Importar dados' : 'Disponível nos planos Profissional e Enterprise'}>
+                        <span>
+                          <IconButton onClick={() => navigate(`/calculos/${p._id}/importar`)} disabled={!calculosHabilitados}>
+                            <CloudUpload />
+                          </IconButton>
+                        </span>
                       </Tooltip>
                     )}
                     {(p.status === 'importado' || p.status === 'processado') && (
@@ -114,10 +134,12 @@ export default function CalculoLista() {
                         </IconButton>
                       </Tooltip>
                     )}
-                    <Tooltip title="Remover">
-                      <IconButton onClick={() => setDeleteDialog({ open: true, id: p._id, nome: p.nome })}>
-                        <Delete />
-                      </IconButton>
+                    <Tooltip title={calculosHabilitados ? 'Remover' : 'Disponível nos planos Profissional e Enterprise'}>
+                      <span>
+                        <IconButton onClick={() => setDeleteDialog({ open: true, id: p._id, nome: p.nome })} disabled={!calculosHabilitados}>
+                          <Delete />
+                        </IconButton>
+                      </span>
                     </Tooltip>
                   </TableCell>
                 </TableRow>

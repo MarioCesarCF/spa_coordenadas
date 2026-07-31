@@ -43,7 +43,43 @@ describe('Layout', () => {
     expect(screen.getByText('Sylven')).toBeInTheDocument()
     expect(screen.getByText('Empresas')).toBeInTheDocument()
     expect(screen.getByText('Documentos')).toBeInTheDocument()
+    expect(screen.getByText('Cálculos')).toBeInTheDocument()
     expect(screen.getByText('Organização')).toBeInTheDocument()
+  })
+
+  it('exibe item Cálculos mesmo quando o plano não habilita o recurso', () => {
+    useAuth.mockReturnValue({
+      user: { nome: 'Admin' },
+      logout: vi.fn(),
+    })
+    useOrg.mockReturnValue({
+      org: { config_limites: { calculos_habilitados: false } },
+      orgLoading: false,
+    })
+    renderWithRouter(<Layout />)
+    expect(screen.getByText('Cálculos')).toBeInTheDocument()
+  })
+
+  it('exibe item Cálculos mesmo sem organização vinculada', () => {
+    useAuth.mockReturnValue({
+      user: { nome: 'Admin' },
+      logout: vi.fn(),
+    })
+    renderWithRouter(<Layout />)
+    expect(screen.getByText('Cálculos')).toBeInTheDocument()
+  })
+
+  it('exibe item Cálculos quando o plano libera o recurso', () => {
+    useAuth.mockReturnValue({
+      user: { nome: 'Admin' },
+      logout: vi.fn(),
+    })
+    useOrg.mockReturnValue({
+      org: { config_limites: { calculos_habilitados: true } },
+      orgLoading: false,
+    })
+    renderWithRouter(<Layout />)
+    expect(screen.getByText('Cálculos')).toBeInTheDocument()
   })
 
   it('renderiza conteúdo da página filha', () => {

@@ -6,6 +6,7 @@ import {
 } from '@mui/material'
 import { Save, ArrowBack, CloudUpload } from '@mui/icons-material'
 import api from '../api/axios'
+import { useOrg } from '../contexts/OrganizacaoContext'
 
 export default function DocumentoForm() {
   const { id } = useParams()
@@ -13,6 +14,9 @@ export default function DocumentoForm() {
   const empresaIdParam = searchParams.get('empresa')
   const isEditing = !!id
   const navigate = useNavigate()
+  const { org } = useOrg()
+
+  const storageSemPlano = (org?.config_limites?.storage_gb ?? 1) <= 0
 
   const [empresas, setEmpresas] = useState([])
   const [loadingEmpresas, setLoadingEmpresas] = useState(false)
@@ -93,6 +97,12 @@ export default function DocumentoForm() {
 
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
+      {!isEditing && storageSemPlano && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          Armazenamento de documentos não está incluído no seu plano atual. Faça upgrade para enviar arquivos.
+        </Alert>
+      )}
+
       <Paper sx={{ p: 3 }}>
         <Box component="form" onSubmit={handleSubmit}>
           <FormControl fullWidth sx={{ mb: 2 }} required={!isEditing}>
@@ -128,6 +138,7 @@ export default function DocumentoForm() {
                 component="label"
                 startIcon={<CloudUpload />}
                 fullWidth
+                disabled={storageSemPlano}
                 sx={{ py: 3, borderStyle: 'dashed' }}
               >
                 {arquivo ? arquivo.name : 'Clique para selecionar o arquivo (PDF, imagem, DOC, etc.)'}
@@ -170,7 +181,7 @@ export default function DocumentoForm() {
             <Button variant="outlined" onClick={() => navigate('/documentos')}>
               Cancelar
             </Button>
-            <Button type="submit" variant="contained" startIcon={<Save />} disabled={saving}>
+            <Button type="submit" variant="contained" startIcon={<Save />} disabled={saving || (!isEditing && storageSemPlano)}>
               {saving ? 'Salvando...' : 'Salvar'}
             </Button>
           </Box>

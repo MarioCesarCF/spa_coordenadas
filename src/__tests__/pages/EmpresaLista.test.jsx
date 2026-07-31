@@ -21,7 +21,12 @@ vi.mock('../../api/axios', () => ({
   },
 }))
 
+vi.mock('../../contexts/OrganizacaoContext', () => ({
+  useOrg: vi.fn(),
+}))
+
 import api from '../../api/axios'
+import { useOrg } from '../../contexts/OrganizacaoContext'
 
 const empresasMock = [
   {
@@ -53,6 +58,7 @@ function renderLista() {
 describe('EmpresaLista', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    useOrg.mockReturnValue({ org: null, orgLoading: false })
   })
 
   it('renderiza botões e filtros', async () => {

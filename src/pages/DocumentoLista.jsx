@@ -9,6 +9,7 @@ import {
 } from '@mui/material'
 import { Add, Delete, Edit, Search, Clear, Download, ArrowBack } from '@mui/icons-material'
 import api from '../api/axios'
+import { useOrg } from '../contexts/OrganizacaoContext'
 
 function formatDate(dateStr) {
   if (!dateStr) return '—'
@@ -37,6 +38,9 @@ function getUrgencia(dias) {
 export default function DocumentoLista() {
   const { empresaId } = useParams()
   const navigate = useNavigate()
+  const { org } = useOrg()
+
+  const storageSemPlano = (org?.config_limites?.storage_gb ?? 1) <= 0
 
   const [documentos, setDocumentos] = useState([])
   const [loading, setLoading] = useState(false)
@@ -135,12 +139,23 @@ export default function DocumentoLista() {
             {empresaNome ? `Documentos — ${empresaNome}` : 'Documentos'}
           </Typography>
         </Box>
-        <Button variant="contained" startIcon={<Add />}
-          onClick={() => navigate(`/documento/novo${empresaId ? `?empresa=${empresaId}` : ''}`)}
-          sx={{ whiteSpace: 'nowrap', flex: { xs: 1, sm: 'none' } }}>
-          Novo Documento
-        </Button>
+        <Tooltip title={storageSemPlano ? 'Armazenamento não incluído no seu plano.' : ''}>
+          <span>
+            <Button variant="contained" startIcon={<Add />}
+              onClick={() => navigate(`/documento/novo${empresaId ? `?empresa=${empresaId}` : ''}`)}
+              disabled={storageSemPlano}
+              sx={{ whiteSpace: 'nowrap', flex: { xs: 1, sm: 'none' } }}>
+              Novo Documento
+            </Button>
+          </span>
+        </Tooltip>
       </Box>
+
+      {storageSemPlano && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          Armazenamento de documentos não está incluído no seu plano atual. Faça upgrade para enviar arquivos.
+        </Alert>
+      )}
 
       <Box sx={{
         display: 'flex',

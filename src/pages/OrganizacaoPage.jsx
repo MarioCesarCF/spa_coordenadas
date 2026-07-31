@@ -27,16 +27,10 @@ const PLANO_LABELS = {
   enterprise: 'Enterprise',
 }
 
-const STATUS_LABELS = {
-  trial: 'Trial',
-  ativo: 'Ativo',
-  cancelado: 'Cancelado',
-  expirado: 'Expirado',
-}
-
 export default function OrganizacaoPage() {
   const { org, orgLoading, criarOrg, atualizarOrg } = useOrg()
   const [membros, setMembros] = useState([])
+  const [empresasCount, setEmpresasCount] = useState(0)
   const [openConvite, setOpenConvite] = useState(false)
   const [openPlano, setOpenPlano] = useState(false)
   const [planoSelecionado, setPlanoSelecionado] = useState('')
@@ -61,6 +55,9 @@ export default function OrganizacaoPage() {
       setEditDominio(org.dominio_personalizado || '')
       setPlanoSelecionado(org.plano)
       carregarMembros()
+      api.get('/empresa')
+        .then(({ data }) => setEmpresasCount(data.length))
+        .catch(() => {})
     }
   }, [org, carregarMembros])
 
@@ -198,8 +195,7 @@ export default function OrganizacaoPage() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
               <Typography variant="h6">Plano Atual</Typography>
               <Button
-                variant="outlined"
-                size="small"
+                variant="contained"
                 startIcon={<UpgradeIcon />}
                 onClick={() => setOpenPlano(true)}
               >
@@ -212,15 +208,6 @@ export default function OrganizacaoPage() {
                 color={org.plano === 'free' ? 'default' : 'primary'}
                 variant={org.plano === 'free' ? 'outlined' : 'filled'}
               />
-              <Chip
-                label={STATUS_LABELS[org.status] || org.status}
-                color={org.status === 'ativo' ? 'success' : org.status === 'trial' ? 'warning' : 'error'}
-              />
-              {org.data_expiracao && (
-                <Typography variant="body2" color="text.secondary">
-                  Expira em: {new Date(org.data_expiracao).toLocaleDateString('pt-BR')}
-                </Typography>
-              )}
             </Stack>
             <Box sx={{ mt: 2 }}>
               <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -228,13 +215,13 @@ export default function OrganizacaoPage() {
               </Typography>
               <Stack direction="row" spacing={3} sx={{ flexWrap: 'wrap' }}>
                 <Typography variant="body2">
-                  Empresas: <strong>{org.config_limites.max_empresas === 99999 ? 'Ilimitado' : org.config_limites.max_empresas}</strong>
+                  Empresas: <strong>{empresasCount}/{org.config_limites.max_empresas === 99999 ? 'Ilimitado' : org.config_limites.max_empresas}</strong>
                 </Typography>
                 <Typography variant="body2">
-                  Usuários: <strong>{org.config_limites.max_usuarios === 99999 ? 'Ilimitado' : org.config_limites.max_usuarios}</strong>
+                  Usuários: <strong>{membros.length}/{org.config_limites.max_usuarios === 99999 ? 'Ilimitado' : org.config_limites.max_usuarios}</strong>
                 </Typography>
                 <Typography variant="body2">
-                  Armazenamento: <strong>{org.config_limites.storage_gb}GB</strong>
+                  Armazenamento: <strong>{org.config_limites.storage_gb === 0 ? '—' : `${org.config_limites.storage_gb}GB`}</strong>
                 </Typography>
                 <Typography variant="body2">
                   Cálculos: <strong>{org.config_limites.calculos_habilitados ? '✅' : '❌'}</strong>

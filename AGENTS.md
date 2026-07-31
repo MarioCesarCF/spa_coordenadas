@@ -76,6 +76,22 @@ Em produção (Render), a própria plataforma define `VITE_API_URL` como env var
 ## Related project
 Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start with `npm run dev` there first.
 
+### 2026-07-31 — Cálculos e Documentos visíveis em todos os planos (modo leitura)
+- Menus "Cálculos" e "Documentos" agora aparecem em todos os planos; sem o recurso, o usuário só visualiza e vê mensagem de upgrade
+- Backend: `requireCalculos` passou a bloquear apenas ações (POST criar, importar, processar e DELETE); GET de lista/projeto/resultados ficou liberado (ver `calculo.route.js`)
+- Frontend: `CalculoLista` mostra banner de upgrade e desabilita "Novo Projeto", importar e remover; `CalculoResultados` oculta "Processar"/"Importar dados" e mostra a mensagem
+- Rotas de ação (`/calculos/novo`, `/calculos/:id/importar`, `/calculos/:id/editar`) seguem protegidas por `ProFeatureGuard`
+- `DocumentoLista`/`DocumentoForm` seguem bloqueando upload quando `storage_gb <= 0` (mensagem já existente)
+- 54 testes passando; build OK
+
+### 2026-07-31 — Enforcement de limites de plano
+- Backend passou a bloquear (403) cálculos sem `config_limites.calculos_habilitados`, empresas acima de `max_empresas` e uploads sem `storage_gb`; plano free agora realmente não tem cálculos nem uploads
+- Frontend: item "Cálculos" no menu aparece apenas se o plano liberar (`Layout.jsx`); rotas `/calculos*` protegidas pelo novo `ProFeatureGuard` (`App.jsx`)
+- `EmpresaLista`: botões "Nova Empresa"/"Importar" desabilitados quando `empresas.length >= max_empresas` (com alerta)
+- `DocumentoLista`/`DocumentoForm`: "Novo Documento" e upload desabilitados quando `storage_gb <= 0`
+- `OrganizacaoPage`: card "Limites do plano" agora mostra uso real (ex.: "Empresas: 3/5"); botão "Alterar Plano" (já existente) atualiza `config_limites` via `PATCH /organizacao/me`
+- 54 testes passando; build OK
+
 ### 2026-07-31 — Tema dark/light + toggle no header
 - Criado `src/contexts/ThemeContext.jsx`: `ThemeProvider`, `useThemeMode` e `lightTheme`; modo persistido em `localStorage` (`sylven_theme_mode`)
 - `main.jsx` envolve a app com o ThemeProvider; `App.jsx` mantém `CssBaseline` e força tema **light** apenas na rota `/login` (será redesenhada à parte)

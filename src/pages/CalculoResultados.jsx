@@ -7,6 +7,7 @@ import {
 } from '@mui/material'
 import { ArrowBack, CloudUpload, Refresh } from '@mui/icons-material'
 import api from '../api/axios'
+import { useOrg } from '../contexts/OrganizacaoContext'
 
 function TabPanel({ children, value, index }) {
   return value === index ? <Box sx={{ pt: 2 }}>{children}</Box> : null
@@ -15,10 +16,13 @@ function TabPanel({ children, value, index }) {
 export default function CalculoResultados() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { org } = useOrg()
   const [tab, setTab] = useState(0)
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+
+  const calculosHabilitados = !org || !!org.config_limites?.calculos_habilitados
 
   const fetchResultados = async () => {
     setLoading(true)
@@ -78,7 +82,7 @@ export default function CalculoResultados() {
           color={projeto.status === 'processado' ? 'success' : 'info'}
           size="small"
         />
-        {projeto.status === 'importado' && (
+        {calculosHabilitados && projeto.status === 'importado' && (
           <>
             <Button variant="contained" startIcon={<Refresh />} onClick={async () => {
               try {
@@ -90,17 +94,23 @@ export default function CalculoResultados() {
             </Button>
           </>
         )}
-        {projeto.status === 'rascunho' && (
+        {calculosHabilitados && projeto.status === 'rascunho' && (
           <Button variant="outlined" startIcon={<CloudUpload />} onClick={() => navigate(`/calculos/${id}/importar`)}>
             Importar dados
           </Button>
         )}
       </Box>
 
-      {!temProcesso && (
-        <Alert severity="info" sx={{ mb: 2 }}>
-          Projeto importado mas ainda não processado. Clique em &ldquo;Processar&rdquo; para executar os cálculos.
+      {!calculosHabilitados ? (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          Cálculos florestais não estão incluídos no seu plano atual. Faça upgrade para processar projetos.
         </Alert>
+      ) : (
+        !temProcesso && (
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Projeto importado mas ainda não processado. Clique em &ldquo;Processar&rdquo; para executar os cálculos.
+          </Alert>
+        )
       )}
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

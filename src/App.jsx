@@ -17,6 +17,7 @@ import CalculoForm from './pages/CalculoForm'
 import CalculoImportar from './pages/CalculoImportar'
 import CalculoResultados from './pages/CalculoResultados'
 import { OrganizacaoProvider } from './contexts/OrganizacaoContext'
+import ProFeatureGuard from './components/ProFeatureGuard'
 
 export default function App() {
   return (
@@ -46,10 +47,10 @@ export default function App() {
               <Route path="/perfil" element={<Perfil />} />
               <Route path="/organizacao" element={<OrganizacaoPage />} />
               <Route path="/calculos" element={<CalculoLista />} />
-              <Route path="/calculos/novo" element={<CalculoForm />} />
+              <Route path="/calculos/novo" element={<ProFeatureGuard><CalculoForm /></ProFeatureGuard>} />
               <Route path="/calculos/:id" element={<CalculoResultados />} />
-              <Route path="/calculos/:id/importar" element={<CalculoImportar />} />
-              <Route path="/calculos/:id/editar" element={<CalculoForm />} />
+              <Route path="/calculos/:id/importar" element={<ProFeatureGuard><CalculoImportar /></ProFeatureGuard>} />
+              <Route path="/calculos/:id/editar" element={<ProFeatureGuard><CalculoForm /></ProFeatureGuard>} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

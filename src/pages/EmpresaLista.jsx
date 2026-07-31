@@ -34,8 +34,10 @@ import {
   Description,
 } from '@mui/icons-material'
 import api from '../api/axios'
+import { useOrg } from '../contexts/OrganizacaoContext'
 
 export default function EmpresaLista() {
+  const { org } = useOrg()
   const [empresas, setEmpresas] = useState([])
   const [loading, setLoading] = useState(false)
   const [filters, setFilters] = useState({ cidade: '', responsavel: '', numero_processo: '' })
@@ -130,6 +132,12 @@ export default function EmpresaLista() {
 
   const hasFilters = filters.cidade || filters.responsavel || filters.numero_processo
 
+  const limiteEmpresas = org?.config_limites?.max_empresas
+  const empresasNoLimite =
+    typeof limiteEmpresas === 'number' &&
+    limiteEmpresas !== 99999 &&
+    empresas.length >= limiteEmpresas
+
   return (
     <Box>
       <Box sx={{
@@ -144,23 +152,36 @@ export default function EmpresaLista() {
           Empresas
         </Typography>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            onClick={() => navigate('/empresa/nova')}
-            sx={{ whiteSpace: 'nowrap', flex: { xs: 1, sm: 'none' } }}
+          <Tooltip
+            title={empresasNoLimite ? `Limite do plano atingido (${limiteEmpresas}). Exclua empresas ou faça upgrade.` : ''}
           >
-            Nova Empresa
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<FileUpload />}
-            onClick={() => fileInputRef.current?.click()}
-            disabled={importing}
-            sx={{ whiteSpace: 'nowrap', flex: { xs: 1, sm: 'none' } }}
+            <span>
+              <Button
+                variant="contained"
+                startIcon={<Add />}
+                onClick={() => navigate('/empresa/nova')}
+                disabled={empresasNoLimite}
+                sx={{ whiteSpace: 'nowrap', flex: { xs: 1, sm: 'none' } }}
+              >
+                Nova Empresa
+              </Button>
+            </span>
+          </Tooltip>
+          <Tooltip
+            title={empresasNoLimite ? `Limite do plano atingido (${limiteEmpresas}). Exclua empresas ou faça upgrade.` : ''}
           >
-            {importing ? 'Importando...' : 'Importar'}
-          </Button>
+            <span>
+              <Button
+                variant="outlined"
+                startIcon={<FileUpload />}
+                onClick={() => fileInputRef.current?.click()}
+                disabled={importing || empresasNoLimite}
+                sx={{ whiteSpace: 'nowrap', flex: { xs: 1, sm: 'none' } }}
+              >
+                {importing ? 'Importando...' : 'Importar'}
+              </Button>
+            </span>
+          </Tooltip>
           <input
             type="file"
             ref={fileInputRef}
@@ -170,6 +191,12 @@ export default function EmpresaLista() {
           />
         </Box>
       </Box>
+
+      {empresasNoLimite && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          Você atingiu o limite de {limiteEmpresas} empresas do seu plano. Exclua empresas ou faça upgrade para continuar cadastrando.
+        </Alert>
+      )}
 
       <Box
         sx={{
