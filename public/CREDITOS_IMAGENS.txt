@@ -1,0 +1,25 @@
+Imagens de fundo da tela de login - fontes e licencas
+======================================================
+
+fundo_eucalipto_1_web.jpg
+  Origem : Wikimedia Commons - "Ouro Verde" or Green Gold Eucalyptus Plantation
+  Autor  : Under the same moon...
+  Licenca: CC BY 2.0
+  URL    : https://commons.wikimedia.org/wiki/File:%22Ouro_Verde%22_or_Green_Gold_Eucalyptus_Plantation_(20447560520).jpg
+
+fundo_eucalipto_2_web.jpg
+  Origem : Wikimedia Commons - Plantação de Eucalipto em Belo Oriente MG
+  Autor  : HVL
+  Licenca: CC BY 3.0
+  URL    : https://commons.wikimedia.org/wiki/File:Planta%C3%A7%C3%A3o_de_Eucalipto_em_Belo_Oriente_MG.JPG
+
+fundo_eucalipto_3_web.jpg
+  Origem : Wikimedia Commons - Reflorestamento eucalipto Espírito Santo
+  Autor  : Fábio Pozzebom/ABr
+  Licenca: CC BY 3.0 br
+  URL    : https://commons.wikimedia.org/wiki/File:Reflorestamento_eucalipto_Esp%C3%ADrito_Santo_(F%C3%A1bio_Pozzebom)24mar2007.jpg
+
+NOTA: As licencas CC BY exigem atribuicao ao autor. Se uma destas imagens for
+mantida em producao, incluir credito visivel ou na politica de creditos do app.
+
+As demais (tela_login_*.jpg/webp e versoes _web) sao fotos proprias do usuario.

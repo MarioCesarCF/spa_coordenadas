@@ -29,7 +29,18 @@ vi.mock('@mui/material', () => {
     CardContent: mockComponent('div', 'CardContent'),
     Typography: mockComponent('span', 'Typography'),
     Button: mockComponent('button', 'Button'),
-    TextField: mockComponent('input', 'TextField'),
+    TextField: React.forwardRef(
+      ({ select, children, label, sx, slotProps, component, ...props }, ref) => {
+        if (select) {
+          return React.createElement(
+            'div',
+            { role: 'combobox', 'aria-label': label, ...props, ref },
+            children
+          )
+        }
+        return React.createElement('input', { 'aria-label': label, ...props, ref })
+      }
+    ),
     Alert: mockComponent('div', 'Alert'),
     AppBar: mockComponent('div', 'AppBar'),
     Toolbar: mockComponent('div', 'Toolbar'),
@@ -56,6 +67,31 @@ vi.mock('@mui/material', () => {
     IconButton: mockComponent('button', 'IconButton'),
     InputAdornment: mockComponent('div', 'InputAdornment'),
     Chip: mockComponent('span', 'Chip'),
+    Stack: ({ children, direction, spacing, divider, sx, ...props }) =>
+      React.createElement('div', props, children),
+    Tabs: ({ children, value, onChange, sx }) =>
+      React.createElement(
+        'div',
+        { role: 'tablist', sx },
+        React.Children.map(children, (child, index) =>
+          child
+            ? React.cloneElement(child, {
+                'aria-selected': child.props.value === value,
+                onClick: () => onChange?.(null, child.props.value ?? index),
+              })
+            : null
+        )
+      ),
+    Tab: React.forwardRef(({ label, children, sx, value, ...props }, ref) =>
+      React.createElement('button', { role: 'tab', type: 'button', ...props, ref }, label, children)
+    ),
+    Collapse: ({ children, in: aberto }) =>
+      aberto ? React.createElement(React.Fragment, null, children) : null,
+    Checkbox: React.forwardRef((props, ref) =>
+      React.createElement('input', { type: 'checkbox', ...props, ref })
+    ),
+    FormControlLabel: ({ control, label, children, sx, ...props }) =>
+      React.createElement('label', props, control, label, children),
     CssBaseline: () => null,
     ThemeProvider: ({ children }) => React.createElement(React.Fragment, null, children),
     createTheme: () => ({}),

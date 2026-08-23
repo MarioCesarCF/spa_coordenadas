@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { lightTheme } from './contexts/ThemeContext'
 import PrivateRoute from './components/PrivateRoute'
+import AdminRoute from './components/AdminRoute'
 import Layout from './components/Layout'
 import Login from './pages/Login'
 import EmpresaLista from './pages/EmpresaLista'
@@ -16,6 +17,7 @@ import CalculoLista from './pages/CalculoLista'
 import CalculoForm from './pages/CalculoForm'
 import CalculoImportar from './pages/CalculoImportar'
 import CalculoResultados from './pages/CalculoResultados'
+import AdminPage from './pages/admin/AdminPage'
 import { OrganizacaoProvider } from './contexts/OrganizacaoContext'
 import ProFeatureGuard from './components/ProFeatureGuard'
 
@@ -51,6 +53,7 @@ export default function App() {
               <Route path="/calculos/:id" element={<CalculoResultados />} />
               <Route path="/calculos/:id/importar" element={<ProFeatureGuard><CalculoImportar /></ProFeatureGuard>} />
               <Route path="/calculos/:id/editar" element={<ProFeatureGuard><CalculoForm /></ProFeatureGuard>} />
+              <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

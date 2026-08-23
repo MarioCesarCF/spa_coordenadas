@@ -4,14 +4,16 @@ import {
   TableCell, TableContainer, TableHead, TableRow, IconButton,
   Dialog, DialogTitle, DialogContent, DialogActions, Alert,
   Snackbar, Divider, Chip, Stack, Card, CardContent,
-  ToggleButtonGroup, ToggleButton, LinearProgress,
+  ToggleButtonGroup, ToggleButton, LinearProgress, Tooltip,
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import UpgradeIcon from '@mui/icons-material/Upgrade'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import api from '../api/axios'
 import { useOrg } from '../contexts/OrganizacaoContext'
+import { useAuth } from '../hooks/useAuth'
 
 const PLANOS = [
   { key: 'free', label: 'Free', preco: 'Grátis', cor: 'default', empresas: 5, usuarios: 1, storage: '—', calculos: false },
@@ -28,7 +30,8 @@ const PLANO_LABELS = {
 }
 
 export default function OrganizacaoPage() {
-  const { org, orgLoading, criarOrg, atualizarOrg } = useOrg()
+  const { org, orgLoading, atualizarOrg } = useOrg()
+  const { user } = useAuth()
   const [membros, setMembros] = useState([])
   const [empresasCount, setEmpresasCount] = useState(0)
   const [openConvite, setOpenConvite] = useState(false)
@@ -121,10 +124,26 @@ export default function OrganizacaoPage() {
     }
   }
 
-  if (orgLoading) return null
+  const handleAlterarPapel = async (membro) => {
+    const novoPapel = membro.papel === 'admin' ? 'membro' : 'admin'
+    try {
+      await api.patch(`/organizacao/membros/${membro._id}`, { papel: novoPapel })
+      setSnack({
+        open: true,
+        message: `${membro.nome} agora é ${novoPapel === 'admin' ? 'administrador' : 'membro'}`,
+        severity: 'success',
+      })
+      carregarMembros()
+    } catch (err) {
+      setSnack({
+        open: true,
+        message: err.response?.data?.message || 'Erro ao alterar papel',
+        severity: 'error',
+      })
+    }
+  }
 
-  const [formCriar, setFormCriar] = useState({ nome: '', slug: '' })
-  const [criando, setCriando] = useState(false)
+  if (orgLoading) return null
 
   if (!org) {
     return (
@@ -134,47 +153,12 @@ export default function OrganizacaoPage() {
             Bem-vindo!
           </Typography>
           <Typography variant="body1" color="text.secondary" paragraph>
-            Você ainda não tem uma organização. Crie uma para começar a gerenciar sua equipe e dados.
+            Sua conta ainda não está vinculada a uma organização.
           </Typography>
-          <Stack spacing={2} sx={{ mt: 3 }}>
-            <TextField
-              label="Nome da organização"
-              fullWidth
-              value={formCriar.nome}
-              onChange={(e) => setFormCriar({
-                ...formCriar,
-                nome: e.target.value,
-                slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
-              })}
-            />
-            <TextField
-              label="Slug (URL amigável)"
-              fullWidth
-              value={formCriar.slug}
-              onChange={(e) => setFormCriar({ ...formCriar, slug: e.target.value })}
-              helperText="Usado para identificar sua organização na URL"
-            />
-            <Button
-              variant="contained"
-              size="large"
-              disabled={!formCriar.nome || !formCriar.slug || criando}
-              onClick={async () => {
-                setCriando(true)
-                try {
-                  await criarOrg(formCriar.nome, formCriar.slug)
-                } catch (err) {
-                  const msg = err.response?.data?.message || 'Erro ao criar organização'
-                  setSnack({ open: true, message: msg, severity: 'error' })
-                } finally {
-                  setCriando(false)
-                }
-              }}
-            >
-              {criando ? 'Criando...' : 'Criar Organização'}
-            </Button>
-          </Stack>
-          <Alert severity="info" sx={{ mt: 2 }}>
-            Se você já possui uma organização, peça ao administrador para te adicionar.
+          <Alert severity="info">
+            As organizações são criadas pelo time Sylven no momento da contratação do serviço.
+            Se sua empresa já é cliente, peça ao administrador da sua organização para cadastrar
+            seu acesso, ou entre em contato com o nosso suporte.
           </Alert>
         </Paper>
       </Box>
@@ -299,7 +283,14 @@ export default function OrganizacaoPage() {
                         </TableCell>
                         <TableCell>{m.numero_documento}</TableCell>
                         <TableCell align="right">
-                          {m.papel !== 'admin' && (
+                          {user?.papel === 'admin' && m._id !== user?._id && (
+                            <Tooltip title={m.papel === 'admin' ? 'Tornar membro' : 'Tornar admin'}>
+                              <IconButton size="small" onClick={() => handleAlterarPapel(m)}>
+                                <AdminPanelSettingsIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
+                          {m.papel !== 'admin' && m._id !== user?._id && (
                             <IconButton size="small" color="error"
                               onClick={() => handleRemover(m._id, m.nome)}>
                               <DeleteIcon />

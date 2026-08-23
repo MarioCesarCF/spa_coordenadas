@@ -30,6 +30,7 @@ function renderLogin() {
 describe('Login', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    localStorage.clear()
   })
 
   it('renderiza formulário de login', () => {
@@ -90,6 +91,45 @@ describe('Login', () => {
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true })
     })
+  })
+
+  it('salva o email ao logar com Lembrar-me marcado', async () => {
+    const mockLogin = vi.fn().mockResolvedValue({ nome: 'João' })
+    useAuth.mockReturnValue({ login: mockLogin, isAuthenticated: false })
+
+    renderLogin()
+    await userEvent.type(screen.getByLabelText('Email'), 'lembrar@test.com')
+    await userEvent.type(screen.getByLabelText('Senha'), '123456')
+    await userEvent.click(screen.getByRole('checkbox'))
+    await userEvent.click(screen.getByRole('button', { name: 'Entrar' }))
+
+    await waitFor(() => {
+      expect(localStorage.getItem('sylven_lembrar_email')).toBe('lembrar@test.com')
+    })
+  })
+
+  it('não salva o email quando Lembrar-me está desmarcado', async () => {
+    const mockLogin = vi.fn().mockResolvedValue({ nome: 'João' })
+    useAuth.mockReturnValue({ login: mockLogin, isAuthenticated: false })
+
+    renderLogin()
+    await userEvent.type(screen.getByLabelText('Email'), 'nao-lembrar@test.com')
+    await userEvent.type(screen.getByLabelText('Senha'), '123456')
+    await userEvent.click(screen.getByRole('button', { name: 'Entrar' }))
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true })
+    })
+    expect(localStorage.getItem('sylven_lembrar_email')).toBeNull()
+  })
+
+  it('preenche o email salvo e marca o checkbox', () => {
+    localStorage.setItem('sylven_lembrar_email', 'salvo@test.com')
+    useAuth.mockReturnValue({ login: vi.fn(), isAuthenticated: false })
+
+    renderLogin()
+    expect(screen.getByLabelText('Email')).toHaveValue('salvo@test.com')
+    expect(screen.getByRole('checkbox')).toBeChecked()
   })
 
   it('desabilita botão enquanto carrega', async () => {

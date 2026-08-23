@@ -32,13 +32,14 @@ import MenuIcon from '@mui/icons-material/Menu'
 import HomeIcon from '@mui/icons-material/Home'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useOrg } from '../contexts/OrganizacaoContext'
 import { useThemeMode } from '../contexts/ThemeContext'
 
 export default function Layout() {
-  const { user, logout } = useAuth()
+  const { user, logout, impersonando, encerrarImpersonacao } = useAuth()
   const { org } = useOrg()
   const { mode, toggleTheme } = useThemeMode()
   const navigate = useNavigate()
@@ -52,12 +53,21 @@ export default function Layout() {
     navigate('/login')
   }
 
+  const handleEncerrarImpersonacao = async () => {
+    await encerrarImpersonacao()
+    navigate('/admin')
+  }
+
   const navItems = [
     { label: 'Empresas', icon: <HomeIcon />, path: '/' },
     { label: 'Documentos', icon: <DescriptionIcon />, path: '/documentos' },
     { label: 'Cálculos', icon: <CalculateIcon />, path: '/calculos' },
     { label: 'Organização', icon: <BusinessIcon />, path: '/organizacao' },
   ]
+
+  if (user?.papel === 'superadmin') {
+    navItems.push({ label: 'Administração', icon: <AdminPanelSettingsIcon />, path: '/admin' })
+  }
 
   const drawer = (
     <Box sx={{ width: 250 }} onClick={() => setDrawerOpen(false)}>
@@ -186,6 +196,34 @@ export default function Layout() {
           </Menu>
         </Toolbar>
       </AppBar>
+
+      {impersonando && (
+        <Box
+          sx={{
+            bgcolor: 'warning.main',
+            color: 'warning.contrastText',
+            px: 2,
+            py: 0.75,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 2,
+            flexWrap: 'wrap',
+          }}
+        >
+          <Typography variant="body2">
+            Você está acessando como <strong>{user?.nome}</strong> ({user?.email})
+          </Typography>
+          <Button
+            size="small"
+            color="inherit"
+            variant="outlined"
+            onClick={handleEncerrarImpersonacao}
+          >
+            Encerrar impersonação
+          </Button>
+        </Box>
+      )}
 
       <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         {drawer}

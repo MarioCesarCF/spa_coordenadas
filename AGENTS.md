@@ -76,6 +76,16 @@ Em produção (Render), a própria plataforma define `VITE_API_URL` como env var
 ## Related project
 Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start with `npm run dev` there first.
 
+### 2026-08-22 — Papel superadmin, painel de administração e impersonação
+- **Hierarquia de papéis:** `superadmin` (equipe interna, visão global) → `admin` da org → `membro`. Menu "Administração" no Layout aparece só para superadmin
+- **Novo componente `AdminRoute`** (`src/components/AdminRoute.jsx`): protege `/admin`, redireciona não-superadmin para `/`
+- **Painel admin** (`/admin`): `pages/admin/AdminPage.jsx` com 3 abas — Organizações (lista com filtros + contadores de uso, criação de org + login administrativo = onboarding de cliente, edição de plano/status/limites), Usuários (lista global, editar papel/dados, remover, "Entrar como"), Logs de Auditoria (filtros por entidade/ação/org/período + paginação + detalhe expansível do JSON)
+- **Impersonação:** `AuthContext` ganhou `impersonar(usuarioId)` / `encerrarImpersonacao()` / `impersonando`; tokens do superadmin são salvos em `su_*` no localStorage antes de assumir a sessão do alvo; banner laranja abaixo do AppBar com botão "Encerrar impersonação"; sessão do alvo é revogada ao encerrar
+- **`OrganizacaoContext`:** recarrega a org quando `user._id` muda (troca de sessão na impersonação); `criarOrg` removido — criação de organização passou a ser exclusiva do painel superadmin (`POST /organizacao` agora é 403 para usuários comuns)
+- **`OrganizacaoPage`:** formulário self-service de criação substituído por mensagem informativa ("organizações são criadas pelo time Sylven na contratação"); tabela de membros ganhou botão promover/rebaixar (`PATCH /organizacao/membros/:id`), ações ocultas para o próprio usuário
+- Backend correspondente: rotas `/admin/*` (superadmin), papel `superadmin` no enum, `escopoOrganizacao` para visão cross-org, AuditLog com `login/logout/impersonate` + campo `organizacao`
+- 54 testes passando; build OK
+
 ### 2026-07-31 — Cálculos e Documentos visíveis em todos os planos (modo leitura)
 - Menus "Cálculos" e "Documentos" agora aparecem em todos os planos; sem o recurso, o usuário só visualiza e vê mensagem de upgrade
 - Backend: `requireCalculos` passou a bloquear apenas ações (POST criar, importar, processar e DELETE); GET de lista/projeto/resultados ficou liberado (ver `calculo.route.js`)
@@ -118,6 +128,19 @@ Backend API lives at `D:\meus_projetos\API_COORDENADAS` (separate repo). Start w
 - Criado `vercel.json` na raiz com rewrite `/(.*) → /index.html` (fallback SPA)
 - Commit `2e168a9`; deploy automático no Vercel via GitHub
 
+## Pendências — testes manuais
+
+### Roteiro de teste E2E do fluxo superadmin/organizações (pendente — 2026-08-22)
+Ambiente local: backend `http://localhost:27017` + frontend `http://localhost:5173` (`npm run dev` em ambos). Superadmin: `admin@sylven.com.br` / `Admin@123456`.
+
+1. Login como superadmin → menu **Administração** visível no topo
+2. Aba **Organizações** → "Nova Organização" → preencher cliente + login administrativo → conferir credenciais exibidas no diálogo de sucesso
+3. Logout → entrar com o login administrativo da org criada → Organização → Membros: cadastrar membros, promover/rebaixar papéis
+4. Como admin/membro da org, cadastrar empresas/documentos → confirmar que outra organização NÃO enxerga esses dados
+5. Voltar ao superadmin → aba **Usuários** → ícone ⇄ ("Entrar como") para impersonar usuário da org → conferir banner laranja e botão "Encerrar impersonação"
+6. Aba **Logs** → verificar registros de login, criação de org, convite de membro e impersonação
+7. Conferir limites do plano: criar empresa além do limite free e validar bloqueio (403)
+
 ## Change documentation
 Every major feature or structural change **must** be logged at the bottom of this file in reverse chronological order (newest first). Use the following format:
 
@@ -129,3 +152,24 @@ Every major feature or structural change **must** be logged at the bottom of thi
 ```
 
 This keeps a lightweight changelog of the project's evolution embedded in the agents config.
+
+### 2026-08-23 — Corrige tela em branco do painel admin + "Lembrar-me" no login
+- **Bug raiz (tela em branco em /admin):** `AdminRoute` retornava `<Outlet />`, mas era usado como wrapper com children em `App.jsx` (`<AdminRoute><AdminPage /></AdminRoute>`) — `<Outlet />` renderiza só rotas aninhadas, então o painel nunca montava (tela vazia sem erro). Corrigido para renderizar `children`; removido import `Outlet`
+- **Bug:** `AdminOrganizacoes.jsx`, `AdminLogs.jsx` e `AdminUsuarios.jsx` usavam componentes sem importar (`IconButton`, `Alert`, `useAuth`) — crash de render ("Element type is invalid" / ReferenceError) assim que as listas carregassem; imports corrigidos
+- **Bug:** `AdminPage.jsx` renderizava `<Tab>` soltos sem o wrapper `<Tabs>` (sem indicador/estilo de seleção); migrado para `<Tabs value onChange>`
+- **Novo teste de fumaça** (`__tests__/pages/admin/AdminPage.test.jsx`): monta o painel completo com API mockada (mesmos formatos do backend) e navega pelas 3 abas — pega qualquer crash de render nos componentes admin
+- **Novo teste de regressão** (`__tests__/components/AdminRoute.test.jsx`): cobre superadmin→children, admin/membro→redirect `/`, não autenticado→redirect `/login` e loading
+- Mocks do MUI no `vitest.setup.jsx` ganharam `Stack`, `Tabs`/`Tab` (com value por índice), `Collapse`, `Checkbox`, `FormControlLabel`; `TextField` agora suporta variante `select`
+- **Feature:** checkbox "Lembrar-me" no Login (`pages/Login.jsx`) — salva apenas o **email** no localStorage (`sylven_lembrar_email`), nunca a senha; pré-preenche email e estado do checkbox na próxima visita; 3 novos testes em `Login.test.jsx`
+- **ErrorBoundary** (`components/ErrorBoundary.jsx`) envolvendo a app em `main.jsx`: crash de render agora mostra card com a mensagem de erro em vez de página em branco
+- `OrganizacaoContext` não chama mais `GET /organizacao/me` para superadmin (evita 404 esperado no network)
+- 65 testes passando; build OK
+
+### 2026-08-23 — Fundo fotográfico na tela de login + imagens otimizadas
+- `pages/Login.jsx`: Box externo com `backgroundImage` cobrindo toda a tela (`cover`/`center`) e Card do formulário branco sólido com `boxShadow: 8`
+- Fotos de câmera do usuário eram pesadas demais para web (ex.: `tela_login_1.jpg` = 19,8 MB em 5616×3744); criadas versões `_web.jpg` via System.Drawing (resize p/ 1600–1920px + JPEG q70–78): ~200–850 KB cada
+- Teste de glassmorphism (card translúcido + `backdrop-filter: blur(12px)`) foi implementado e **revertido** por decisão do usuário (não gostou do blur)
+- Adicionadas 3 fotos de plantio de eucalipto do Wikimedia Commons (licenças CC BY), otimizadas: `fundo_eucalipto_1_web.jpg` ("Ouro Verde", CC BY 2.0), `fundo_eucalipto_2_web.jpg` (Belo Oriente MG, CC BY 3.0), `fundo_eucalipto_3_web.jpg` (Reflorestamento ES, CC BY 3.0 br)
+- Fundo em uso no momento: `tela_login_6.avif` (foto própria do usuário); escolha final da imagem ficou pendente para o futuro
+- Créditos/atribuições obrigatórias das licenças registrados em `public/CREDITOS_IMAGENS.txt`; se uma imagem CC for mantida em produção, incluir crédito no app
+- 65 testes passando

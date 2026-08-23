@@ -11,15 +11,20 @@ import {
   InputAdornment,
   IconButton,
   Link,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Logo from '../components/Logo'
 import { useAuth } from '../hooks/useAuth'
 
+const LEMBRAR_EMAIL_KEY = 'sylven_lembrar_email'
+
 export default function Login() {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(() => localStorage.getItem(LEMBRAR_EMAIL_KEY) || '')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [lembrar, setLembrar] = useState(() => Boolean(localStorage.getItem(LEMBRAR_EMAIL_KEY)))
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { login, isAuthenticated } = useAuth()
@@ -35,6 +40,11 @@ export default function Login() {
     setLoading(true)
     try {
       await login(email, password)
+      if (lembrar) {
+        localStorage.setItem(LEMBRAR_EMAIL_KEY, email)
+      } else {
+        localStorage.removeItem(LEMBRAR_EMAIL_KEY)
+      }
       navigate('/', { replace: true })
     } catch (err) {
       setError(
@@ -52,11 +62,14 @@ export default function Login() {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100dvh',
-        bgcolor: '#f5f5f5',
         p: 2,
+        backgroundImage: 'url(/tela_login_6.avif)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
     >
-      <Card sx={{ maxWidth: 400, width: '100%' }}>
+      <Card sx={{ maxWidth: 400, width: '100%', boxShadow: 8 }}>
         <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1, color: 'primary.main' }}>
             <Logo sx={{ width: 56, height: 56 }} />
@@ -105,7 +118,24 @@ export default function Login() {
                 },
               }}
             />
-            <Box sx={{ textAlign: 'right', mb: 2 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                mb: 2,
+              }}
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    size="small"
+                    checked={lembrar}
+                    onChange={(e) => setLembrar(e.target.checked)}
+                  />
+                }
+                label={<Typography variant="body2">Lembrar-me</Typography>}
+              />
               <Link component={RouterLink} to="/esqueci-senha" variant="body2" underline="hover">
                 Esqueceu a senha?
               </Link>

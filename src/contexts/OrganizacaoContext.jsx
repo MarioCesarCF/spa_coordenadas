@@ -1,9 +1,11 @@
 import { createContext, useState, useEffect, useCallback, useContext } from 'react'
 import api from '../api/axios'
+import { useAuth } from '../hooks/useAuth'
 
 export const OrganizacaoContext = createContext(null)
 
 export function OrganizacaoProvider({ children }) {
+  const { user } = useAuth()
   const [org, setOrg] = useState(null)
   const [orgLoading, setOrgLoading] = useState(true)
 
@@ -23,22 +25,18 @@ export function OrganizacaoProvider({ children }) {
     const isPublicPage = ['/login', '/esqueci-senha', '/redefinir-senha'].some(
       (p) => window.location.pathname.startsWith(p)
     )
-    if (accessToken && !isPublicPage) {
-      carregarOrg()
-    } else {
+    if (!accessToken || isPublicPage) {
+      setOrg(null)
       setOrgLoading(false)
+      return
     }
-  }, [carregarOrg])
-
-  const criarOrg = useCallback(async (nome, slug) => {
-    const { data } = await api.post('/organizacao', { nome, slug })
-    setOrg(data.organizacao)
-    localStorage.setItem('accessToken', data.accessToken)
-    const storedUser = JSON.parse(localStorage.getItem('user') || '{}')
-    storedUser.organizacao = data.organizacao._id
-    localStorage.setItem('user', JSON.stringify(storedUser))
-    return data
-  }, [])
+    if (user?.papel === 'superadmin') {
+      setOrg(null)
+      setOrgLoading(false)
+      return
+    }
+    carregarOrg()
+  }, [user?._id, user?.papel, carregarOrg])
 
   const atualizarOrg = useCallback(async (updates) => {
     const { data } = await api.patch('/organizacao/me', updates)
@@ -47,7 +45,7 @@ export function OrganizacaoProvider({ children }) {
   }, [])
 
   return (
-    <OrganizacaoContext.Provider value={{ org, orgLoading, criarOrg, atualizarOrg, carregarOrg }}>
+    <OrganizacaoContext.Provider value={{ org, orgLoading, atualizarOrg, carregarOrg }}>
       {children}
     </OrganizacaoContext.Provider>
   )
