@@ -40,7 +40,8 @@ describe('Layout', () => {
       logout: vi.fn(),
     })
     renderWithRouter(<Layout />)
-    expect(screen.getByText('Sylven')).toBeInTheDocument()
+    const logo = screen.getByRole('img', { name: /Sylven/i })
+    expect(logo).toBeInTheDocument()
     expect(screen.getByText('Empresas')).toBeInTheDocument()
     expect(screen.getByText('Documentos')).toBeInTheDocument()
     expect(screen.getByText('Cálculos')).toBeInTheDocument()

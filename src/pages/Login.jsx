@@ -72,7 +72,7 @@ export default function Login() {
       <Card sx={{ maxWidth: 400, width: '100%', boxShadow: 8 }}>
         <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1, color: 'primary.main' }}>
-            <Logo sx={{ width: 56, height: 56 }} />
+            <Logo sx={{ height: 60 }} />
           </Box>
           <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 600 }}>
             Sylven

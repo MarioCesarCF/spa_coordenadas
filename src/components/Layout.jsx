@@ -70,12 +70,11 @@ export default function Layout() {
   }
 
   const drawer = (
-    <Box sx={{ width: 250 }} onClick={() => setDrawerOpen(false)}>
-      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Logo sx={{ width: 28, height: 28, color: 'primary.main' }} />
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>Sylven</Typography>
-      </Box>
-      <Divider />
+      <Box sx={{ width: 250 }} onClick={() => setDrawerOpen(false)}>
+        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Logo sx={{ height: 32 }} />
+        </Box>
+        <Divider />
       <List>
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding>
@@ -107,66 +106,64 @@ export default function Layout() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar position="static">
-        <Toolbar>
-          {isMobile && (
-            <IconButton color="inherit" edge="start" onClick={() => setDrawerOpen(true)} sx={{ mr: 1 }}>
-              <MenuIcon />
-            </IconButton>
-          )}
-
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box
-            sx={{ display: 'flex', alignItems: 'center', gap: 1, flexGrow: 1, cursor: 'pointer', color: '#fff' }}
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }}
             onClick={() => navigate('/')}
           >
-            <Logo sx={{ width: 28, height: 28 }} />
-            <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: 1 }}>
-              {isMobile ? 'Sylv' : 'Sylven'}
-            </Typography>
+            <Logo sx={{ height: 40 }} />
           </Box>
 
-          {org && !isMobile && (
-            <Chip
-              label={org.nome}
-              size="small"
-              variant="outlined"
-              sx={{ color: 'white', borderColor: 'rgba(255,255,255,0.5)', mr: 2 }}
-            />
-          )}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {!isMobile && org && (
+              <Chip
+                label={org.nome}
+                size="small"
+                variant="outlined"
+                sx={{ color: 'white', borderColor: 'rgba(255,255,255,0.5)', mr: 1 }}
+              />
+            )}
 
-          {!isMobile && navItems.map((item) => (
-            <Button
-              key={item.label}
+            {!isMobile && navItems.map((item) => (
+              <Button
+                key={item.label}
+                color="inherit"
+                onClick={() => navigate(item.path)}
+                startIcon={item.icon}
+                sx={{ mr: 0.5 }}
+              >
+                {item.label}
+              </Button>
+            ))}
+
+            <IconButton
               color="inherit"
-              onClick={() => navigate(item.path)}
-              startIcon={item.icon}
-              sx={{ mr: 1 }}
+              onClick={toggleTheme}
+              aria-label={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
             >
-              {item.label}
-            </Button>
-          ))}
+              {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+            </IconButton>
 
-          <IconButton
-            color="inherit"
-            onClick={toggleTheme}
-            aria-label={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
-            sx={{ mr: 1 }}
-          >
-            {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
-          </IconButton>
+            <Avatar
+              sx={{
+                width: 32,
+                height: 32,
+                bgcolor: 'secondary.main',
+                cursor: 'pointer',
+                fontSize: 14,
+                fontWeight: 700,
+              }}
+              onClick={(e) => setAnchorEl(e.currentTarget)}
+            >
+              {user?.nome?.charAt(0)?.toUpperCase() || 'U'}
+            </Avatar>
 
-          <Avatar
-            sx={{
-              width: 32,
-              height: 32,
-              bgcolor: 'secondary.main',
-              cursor: 'pointer',
-              fontSize: 14,
-              fontWeight: 700,
-            }}
-            onClick={(e) => setAnchorEl(e.currentTarget)}
-          >
-            {user?.nome?.charAt(0)?.toUpperCase() || 'U'}
-          </Avatar>
+            {isMobile && (
+              <IconButton color="inherit" onClick={() => setDrawerOpen(true)}>
+                <MenuIcon />
+              </IconButton>
+            )}
+          </Box>
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
