@@ -74,9 +74,9 @@ export default function Login() {
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1, color: 'primary.main' }}>
             <Logo sx={{ height: 60 }} />
           </Box>
-          <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 600 }}>
+          {/* <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 600 }}>
             Sylven
-          </Typography>
+          </Typography> */}
           <Typography variant="body2" align="center" color="text.secondary" sx={{ mb: 3 }}>
             Faça login para continuar
           </Typography>
