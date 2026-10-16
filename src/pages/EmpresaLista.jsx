@@ -220,7 +220,7 @@ export default function EmpresaLista() {
           }}
         />
         <TextField
-          label="Responsável"
+          label="Nome Responsável"
           size="small"
           value={filters.responsavel}
           onChange={handleFilterChange('responsavel')}

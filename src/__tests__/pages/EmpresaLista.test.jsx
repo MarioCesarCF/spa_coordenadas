@@ -69,7 +69,7 @@ describe('EmpresaLista', () => {
     expect(screen.getByText('Nova Empresa')).toBeInTheDocument()
     expect(screen.getByText('Importar')).toBeInTheDocument()
     expect(screen.getByLabelText('Município')).toBeInTheDocument()
-    expect(screen.getByLabelText('Responsável')).toBeInTheDocument()
+    expect(screen.getByLabelText('Nome Responsável')).toBeInTheDocument()
     expect(screen.getByLabelText('Nº Processo')).toBeInTheDocument()
     await waitFor(() => {})
   })
@@ -175,7 +175,7 @@ describe('EmpresaLista', () => {
   it('mostra botão Limpar filtros quando há filtros ativos', async () => {
     api.get.mockResolvedValue({ data: [] })
     renderLista()
-    const filterInput = screen.getByLabelText('Responsável')
+    const filterInput = screen.getByLabelText('Nome Responsável')
     await userEvent.type(filterInput, 'João')
     await waitFor(() => {
       expect(screen.getByText('Limpar filtros')).toBeInTheDocument()
@@ -185,7 +185,7 @@ describe('EmpresaLista', () => {
   it('limpa filtros ao clicar em Limpar filtros', async () => {
     api.get.mockResolvedValue({ data: [] })
     renderLista()
-    const filterInput = screen.getByLabelText('Responsável')
+    const filterInput = screen.getByLabelText('Nome Responsável')
     await userEvent.type(filterInput, 'João')
     await waitFor(() => {
       expect(screen.getByText('Limpar filtros')).toBeInTheDocument()

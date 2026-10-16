@@ -119,7 +119,7 @@ export default function DocumentoLista() {
     }
   }
 
-  const hasFilters = filters.nome || filters.vencimentoAte
+  const hasFilters = filters.nome || filters.empresa || filters.vencimentoAte
 
   return (
     <Box>
@@ -169,10 +169,15 @@ export default function DocumentoLista() {
         <TextField label="Nome do Documento" size="small" value={filters.nome}
           onChange={handleFilterChange('nome')} sx={{ minWidth: { xs: '100%', sm: 200 } }}
           slotProps={{ input: { startAdornment: <InputAdornment position="start"><Search fontSize="small" /></InputAdornment> } }} />
-        <TextField label="Vencendo até" type="date" size="small" value={filters.vencimentoAte}
-          onChange={handleFilterChange('vencimentoAte')} sx={{ minWidth: { xs: '100%', sm: 200 } }}
-          slotProps={{ inputLabel: { shrink: true } }} />
-        {hasFilters && <Button size="small" onClick={clearFilters} startIcon={<Clear />}>Limpar filtros</Button>}
+         {!empresaId && (
+           <TextField label="Empresa" size="small" value={filters.empresa}
+             onChange={handleFilterChange('empresa')} sx={{ minWidth: { xs: '100%', sm: 200 } }}
+             slotProps={{ input: { startAdornment: <InputAdornment position="start"><Search fontSize="small" /></InputAdornment> } }} />
+         )}
+         <TextField label="Vencendo até" type="date" size="small" value={filters.vencimentoAte}
+           onChange={handleFilterChange('vencimentoAte')} sx={{ minWidth: { xs: '100%', sm: 200 } }}
+           slotProps={{ inputLabel: { shrink: true } }} />
+         {hasFilters && <Button size="small" onClick={clearFilters} startIcon={<Clear />}>Limpar filtros</Button>}
       </Box>
 
       <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>

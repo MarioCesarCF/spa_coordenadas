@@ -61,6 +61,9 @@ const initialForm = {
   coordenada_y: '',
   latitude: '',
   fuso: '',
+  numero_licenca: '',
+  numero_autorizacao: '',
+  observacoes: '',
 }
 
 export default function EmpresaForm() {
@@ -96,6 +99,9 @@ export default function EmpresaForm() {
             coordenada_y: data.coordenada_y?.toString() || '',
             latitude: data.latitude?.toString() || '',
             fuso: data.fuso || '',
+            numero_licenca: data.numero_licenca || '',
+            numero_autorizacao: data.numero_autorizacao || '',
+            observacoes: data.observacoes || '',
           })
         })
         .catch((err) => {
@@ -285,61 +291,58 @@ export default function EmpresaForm() {
                 onChange={handleChange('area_autorizada')}
               />
             </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                label="Número Licença"
+                fullWidth
+                value={form.numero_licenca}
+                onChange={handleChange('numero_licenca')}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                label="Número Autorização"
+                fullWidth
+                value={form.numero_autorizacao}
+                onChange={handleChange('numero_autorizacao')}
+              />
+            </Grid>
           </Grid>
 
           <Typography variant="subtitle1" sx={{ fontWeight: 600 }} gutterBottom>
             Coordenadas
           </Typography>
-          <Grid container spacing={2} sx={{ mb: 3, alignItems: 'stretch' }}>
-            <Grid size={{ xs: 12, md: 5 }}>
-              <Grid container spacing={2} direction="column">
-                <Grid>
-                  <TextField
-                    label="Coordenada X (UTM)"
-                    fullWidth
-                    type="number"
-                    value={form.coordenada_x}
-                    onChange={handleChange('coordenada_x')}
-                  />
-                </Grid>
-                <Grid>
-                  <TextField
-                    label="Longitude (WGS84)"
-                    fullWidth
-                    type="number"
-                    value={form.longitude}
-                    onChange={handleChange('longitude')}
-                  />
-                </Grid>
-                <Grid>
-                  <TextField
-                    label="Fuso"
-                    fullWidth
-                    value={form.fuso}
-                    onChange={handleChange('fuso')}
-                  />
-                </Grid>
-                <Grid>
-                  <TextField
-                    label="Coordenada Y (UTM)"
-                    fullWidth
-                    type="number"
-                    value={form.coordenada_y}
-                    onChange={handleChange('coordenada_y')}
-                  />
-                </Grid>
-                <Grid>
-                  <TextField
-                    label="Latitude (WGS84)"
-                    fullWidth
-                    type="number"
-                    value={form.latitude}
-                    onChange={handleChange('latitude')}
-                  />
-                </Grid>
-              </Grid>
+          <Grid container spacing={2} sx={{ mb: 2 }}>
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <TextField
+                label="Latitude (WGS84)"
+                fullWidth
+                type="number"
+                value={form.latitude}
+                onChange={handleChange('latitude')}
+              />
             </Grid>
-            <Grid size={{ xs: 12, md: 7 }} sx={{ display: 'flex' }}>
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <TextField
+                label="Longitude (WGS84)"
+                fullWidth
+                type="number"
+                value={form.longitude}
+                onChange={handleChange('longitude')}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <TextField
+                label="Fuso"
+                fullWidth
+                value={form.fuso}
+                onChange={handleChange('fuso')}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2} sx={{ mb: 3, alignItems: 'stretch' }}>
+            <Grid size={{ xs: 12 }} sx={{ display: 'flex' }}>
               <Paper
                 sx={{ width: 1, minHeight: { xs: 250, sm: 420 }, overflow: 'hidden', position: 'relative' }}
                 variant="outlined"
@@ -379,6 +382,22 @@ export default function EmpresaForm() {
                   </Button>
                 )}
               </Paper>
+            </Grid>
+          </Grid>
+
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }} gutterBottom>
+            Observações
+          </Typography>
+          <Grid container spacing={2} sx={{ mb: 3 }}>
+            <Grid size={{ xs: 12 }}>
+              <TextField
+                label="Observações"
+                fullWidth
+                multiline
+                rows={4}
+                value={form.observacoes}
+                onChange={handleChange('observacoes')}
+              />
             </Grid>
           </Grid>
 
