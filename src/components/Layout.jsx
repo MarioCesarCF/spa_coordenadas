@@ -148,22 +148,33 @@ export default function Layout() {
               {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
             </IconButton>
 
-            <Avatar
-              sx={{
-                width: 32,
-                height: 32,
-                bgcolor: 'secondary.main',
-                cursor: 'pointer',
-                fontSize: 14,
-                fontWeight: 700,
-              }}
+            <IconButton
               onClick={(e) => setAnchorEl(e.currentTarget)}
+              aria-label="Abrir menu do usuário"
+              aria-haspopup="true"
+              aria-expanded={Boolean(anchorEl)}
+              sx={{ p: 0 }}
             >
-              {user?.nome?.charAt(0)?.toUpperCase() || 'U'}
-            </Avatar>
+              <Avatar
+                sx={{
+                  width: 32,
+                  height: 32,
+                  bgcolor: 'secondary.main',
+                  cursor: 'pointer',
+                  fontSize: 14,
+                  fontWeight: 700,
+                }}
+              >
+                {user?.nome?.charAt(0)?.toUpperCase() || 'U'}
+              </Avatar>
+            </IconButton>
 
             {isMobile && (
-              <IconButton color="inherit" onClick={() => setDrawerOpen(true)}>
+              <IconButton
+                color="inherit"
+                onClick={() => setDrawerOpen(true)}
+                aria-label="Abrir menu de navegação"
+              >
                 <MenuIcon />
               </IconButton>
             )}
@@ -230,7 +241,11 @@ export default function Layout() {
         {drawer}
       </Drawer>
 
-      <Container maxWidth="xl" sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 }, flexGrow: 1, px: { xs: 1.5, md: 3 } }}>
+      <Container
+        component="main"
+        maxWidth="xl"
+        sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 }, flexGrow: 1, px: { xs: 1.5, md: 3 } }}
+      >
         <Outlet />
       </Container>
     </Box>

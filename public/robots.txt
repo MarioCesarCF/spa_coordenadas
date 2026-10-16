@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /calculos
+Disallow: /empresa
+Disallow: /documento
+
+Sitemap: https://spa-coordenadas.vercel.app/sitemap.xml

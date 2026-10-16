@@ -44,6 +44,7 @@ export default function RedefinirSenha() {
 
   return (
     <Box
+      component="main"
       sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -82,7 +83,11 @@ export default function RedefinirSenha() {
                     input: {
                       endAdornment: (
                         <InputAdornment position="end">
-                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                            aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                          >
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                         </InputAdornment>

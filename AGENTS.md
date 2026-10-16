@@ -173,3 +173,14 @@ This keeps a lightweight changelog of the project's evolution embedded in the ag
 - Fundo em uso no momento: `tela_login_6.avif` (foto própria do usuário); escolha final da imagem ficou pendente para o futuro
 - Créditos/atribuições obrigatórias das licenças registrados em `public/CREDITOS_IMAGENS.txt`; se uma imagem CC for mantida em produção, incluir crédito no app
 - 65 testes passando
+
+### 2026-10-16 — Correções de auditoria (web-check): SEO, performance, a11y e headers de segurança
+- **SEO:** criados `public/robots.txt` válido (antes o rewrite SPA devolvia `index.html` em `/robots.txt` → 14 erros) e `public/sitemap.xml`; `index.html` ganhou `meta description`, `robots`, `canonical`, Open Graph/Twitter e `lang="pt-BR"` (era `pt-Br`)
+- **Performance:** `tela_login_6.avif` recomprimida de 4000×2250 (1,30 MB) → 1920×1080 (247 KB, AVIF q50); adicionado `<link rel="preload" as="image">` para o fundo do login (LCP). Code-splitting: todas as páginas autenticadas passaram a `React.lazy` + `Suspense`; Leaflet/react-leaflet saíram do chunk inicial e só carregam em `EmpresaForm`. `build.sourcemap` ligado
+- **vite.config.js:** `modulePreload.polyfill: false` (evita `<script>` inline incompatível com a CSP); `manualChunks` agrupa o vendor (mui/react/react-router/axios). Atenção: nomear um manualChunk como `leaflet` fazia o Rolldown movê-lo para o grafo estático do entry (leaflet preloadado no login) — por isso o leaflet é deixado no chunk automático
+- **A11y:** `aria-label` no botão de mostrar/ocultar senha (`Login` e `RedefinirSenha`), no avatar e no hambúrguer do `Layout`; landmark `<main>` (via `component="main"`) no `Layout`, `Login`, `EsqueciSenha` e `RedefinirSenha`
+- **Segurança:** headers em `vercel.json` (CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy, COOP, HSTS) + `Cache-Control: immutable` em `/assets/*`; `public/.well-known/security.txt`. Ícones do marker do Leaflet migrados de `unpkg.com` para import local do Vite (same-origin)
+- **Limpeza:** removidos `src/assets/{hero.png, MC_Dev-removebg-preview.png, vite.svg, typescript.svg}` (órfãos)
+- **Não alterado (por decisão):** animações não-compostas do MUI (float do label) — override global degradaria a UX
+- **Limpeza adicional:** removidas as fotos de login não usadas (`tela_login_1_web`, `tela_login_2_web`, `tela_login_3`, `tela_login_4`, `tela_login_5`), logos/ícones órfãos (`logos/favicon_sylven.png`, `logos/sylven-tree.svg`, `icons.svg`), o `public/_redirects` (redundante no Vercel — o fallback SPA é feito pelo `vercel.json`) e o `public/CREDITOS_IMAGENS.txt` (documentava imagens CC de eucalipto que já não existem no repositório)
+- 65 testes passando; build OK

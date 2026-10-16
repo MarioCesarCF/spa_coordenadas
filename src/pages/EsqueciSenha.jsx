@@ -29,6 +29,7 @@ export default function EsqueciSenha() {
 
   return (
     <Box
+      component="main"
       sx={{
         display: 'flex',
         justifyContent: 'center',
