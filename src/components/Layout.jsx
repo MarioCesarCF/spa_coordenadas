@@ -111,7 +111,7 @@ export default function Layout() {
             sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }}
             onClick={() => navigate('/')}
           >
-            <Logo sx={{ height: 40, filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.8))' }} />
+            <Logo sx={{ height: 40, border: '1px solid rgba(255,255,255,0.9)', borderRadius: '4px', padding: '2px' }} />
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
